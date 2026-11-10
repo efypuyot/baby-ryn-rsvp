@@ -52,7 +52,7 @@ export async function loadRsvps() {
   while (true) {
     const { data, error } = await supabase
       .from('rsvps')
-      .select('id,representative_name,guest_type,godparent_role,attendance_status,attendee_count,message,created_at')
+      .select('id,representative_name,guest_type,godparent_role,attendance_status,attendee_count,adult_count,kid_count,infant_count,infant_seat_meal_count,message,created_at')
       .order('created_at', { ascending: false })
       .order('id', { ascending: false })
       .range(offset, offset + pageSize - 1);

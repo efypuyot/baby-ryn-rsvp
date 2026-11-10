@@ -4,16 +4,17 @@ import { FlowerPhoto, RoundedPhoto } from './components/Photos.jsx';
 import { EVENT, GODPARENTS, PHOTO_PATHS } from './config.js';
 import { APP_MODE, supabase } from './lib/supabase.js';
 import { loadRsvps, organizerAllowed, saveRsvp } from './lib/rsvp.js';
-import { cleanName, directionsUrl, findGodparent, isPastDeadline, rsvpPayload, rsvpStats, validateRsvp } from './utils.js';
+import { cleanName, directionsUrl, findGodparent, isPastDeadline, rsvpPayload, rsvpStats, totalAttendees, validateRsvp } from './utils.js';
 
 const dateOptions = { month: 'short', day: 'numeric', year: 'numeric' };
+const INITIAL_FORM = { representative_name: '', attendance_status: '', adult_count: 1, kid_count: 0, infant_count: 0, infant_seat_meal_count: 0, message: '' };
 
 function App() {
   const [page, setPage] = useState(() => window.location.hash === '#/organizer' ? 'organizer' : 'welcome');
   const [nameInput, setNameInput] = useState('');
   const [nameError, setNameError] = useState('');
   const [matchedGodparent, setMatchedGodparent] = useState(null);
-  const [form, setForm] = useState({ representative_name: '', attendance_status: '', attendee_count: 1, message: '' });
+  const [form, setForm] = useState({ ...INITIAL_FORM });
   const [submitError, setSubmitError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const submissionId = useRef(null);
@@ -80,7 +81,7 @@ function App() {
     setMatchedGodparent(null);
     setNameInput('');
     setNameError('');
-    setForm({ representative_name: '', attendance_status: '', attendee_count: 1, message: '' });
+    setForm({ ...INITIAL_FORM });
     move('welcome');
   };
 
@@ -247,15 +248,18 @@ function RsvpScreen({ form, setForm, matchedGodparent, error, submitting, onSubm
         </fieldset>
 
         {attending && <div className="guest-count-block">
-          <label className="field-label" htmlFor="attendee-count">How many people will attend, including yourself?</label>
-          <div className="counter-row">
-            <div className="counter">
-              <button type="button" disabled={Number(form.attendee_count) <= 1} aria-label="Remove one attendee" onClick={() => setForm(previous => ({ ...previous, attendee_count: Math.max(1, Number(previous.attendee_count) - 1) }))}>−</button>
-              <input type="number" id="attendee-count" min="1" max={EVENT.maxAttendeesPerFamily} step="1" value={form.attendee_count} onChange={event => setForm(previous => ({ ...previous, attendee_count: event.target.value }))} aria-label="Total number of attendees" />
-              <button type="button" disabled={Number(form.attendee_count) >= EVENT.maxAttendeesPerFamily} aria-label="Add one attendee" onClick={() => setForm(previous => ({ ...previous, attendee_count: Math.min(EVENT.maxAttendeesPerFamily, Number(previous.attendee_count) + 1) }))}>+</button>
-            </div>
-            <span className="counter-help">One response for your whole family <span aria-hidden="true">♡</span></span>
+          <p className="field-label">How many family members will attend, including yourself?</p>
+          <p className="age-group-intro">Please count every person once according to their age on December 13, 2026.</p>
+          <div className="age-counter-grid">
+            <AgeCounter id="adult-count" label="Adults" sublabel="12 years old & above" value={form.adult_count} max={EVENT.maxAttendeesPerFamily} onChange={value => setForm(previous => ({ ...previous, adult_count: value }))} />
+            <AgeCounter id="kid-count" label="Kids" sublabel="3–11 years old" value={form.kid_count} max={EVENT.maxAttendeesPerFamily} onChange={value => setForm(previous => ({ ...previous, kid_count: value }))} />
+            <AgeCounter id="infant-count" label="Infants" sublabel="0–2 years old" value={form.infant_count} max={EVENT.maxAttendeesPerFamily} onChange={value => setForm(previous => ({ ...previous, infant_count: value, infant_seat_meal_count: Math.min(Number(previous.infant_seat_meal_count) || 0, Number(value) || 0) }))} />
           </div>
+          {Number(form.infant_count) > 0 && <div className="infant-special">
+            <AgeCounter id="infant-special-count" label="Infants needing a seat or meal" sublabel="Of the infants above, how many need their own seat and/or kiddie meal?" value={form.infant_seat_meal_count} max={Number(form.infant_count)} onChange={value => setForm(previous => ({ ...previous, infant_seat_meal_count: value }))} />
+          </div>}
+          <div className="age-summary"><span>Total family members attending</span><strong>{Number.isFinite(totalAttendees(form)) ? totalAttendees(form) : '—'}</strong></div>
+          <p className="age-policy-note">Infants aged 0–2 are usually excluded from package headcounts unless they need a separate seat or meal. The organizer will confirm the venue's final policy.</p>
         </div>}
 
         <label className="field-label" htmlFor="baby-message">A little message for Baby Ryn <span className="optional">(optional)</span></label>
@@ -270,14 +274,28 @@ function RsvpScreen({ form, setForm, matchedGodparent, error, submitting, onSubm
   </section>;
 }
 
+function AgeCounter({ id, label, sublabel, value, max, onChange }) {
+  const number = Number(value);
+  const canDecrease = Number.isInteger(number) && number > 0;
+  const canIncrease = Number.isInteger(number) && number >= 0 && number < max;
+  return <div className="age-counter-item">
+    <div className="age-counter-label"><label htmlFor={id}>{label}</label><small>{sublabel}</small></div>
+    <div className="counter">
+      <button type="button" aria-label={`Remove one ${label.toLowerCase()}`} disabled={!canDecrease} onClick={() => onChange(number - 1)}>−</button>
+      <input type="number" id={id} min="0" max={max} step="1" inputMode="numeric" value={value} onChange={event => onChange(event.target.value)} />
+      <button type="button" aria-label={`Add one ${label.toLowerCase()}`} disabled={!canIncrease} onClick={() => onChange(number + 1)}>+</button>
+    </div>
+  </div>;
+}
+
 function ThankYou({ form, onReset }) {
   const attending = form.attendance_status === 'attending';
-  const count = Number(form.attendee_count);
+  const count = totalAttendees(form);
   return <section className="page-card thanks-card" aria-labelledby="thanks-title">
     <div className="thanks-heart" aria-hidden="true">♥</div>
     <SectionEyebrow>RSVP RECEIVED</SectionEyebrow>
     <h1 id="thanks-title">Thank you, <em>{form.representative_name}!</em></h1>
-    {attending ? <><p>We can't wait to celebrate Baby Ryn's special day with you and your loved ones!</p><div className="confirmation-box"><span>Your family RSVP is confirmed for</span><strong>{count} {count === 1 ? 'guest' : 'guests'}</strong><small>including yourself</small></div></> :
+    {attending ? <><p>We can't wait to celebrate Baby Ryn's special day with you and your loved ones!</p><div className="confirmation-box"><span>Your family RSVP is confirmed for</span><strong>{count} {count === 1 ? 'guest' : 'guests'}</strong><small>{Number(form.adult_count)} adults · {Number(form.kid_count)} kids · {Number(form.infant_count)} infants</small>{Number(form.infant_seat_meal_count) > 0 && <small>{form.infant_seat_meal_count} infant(s) requesting a seat or meal</small>}</div></> :
       <><p>Thank you for letting us know. You'll be with us in spirit on Baby Ryn's special day. ♡</p><div className="confirmation-box"><span>Your response has been saved</span><strong>Regretfully declined</strong><small>Sending love your way</small></div></>}
     <div className="thanks-details"><strong>Sunday, December 13, 2026</strong><span>10:00 AM · Our Lady of Sacred Heart Parish Cebu</span><span>12:00 PM · Citadines Cebu City</span></div>
     <div className="page-actions centered"><button className="button button-secondary" type="button" onClick={onReset}>Return to invitation <span aria-hidden="true">↗</span></button></div>
@@ -379,11 +397,17 @@ function OrganizerScreen({ onBack }) {
     {APP_MODE === 'demo' && <div className="mode-banner">Demo dashboard — records here are only from this browser, and this demo view is NOT secured. Configure Supabase for real organizer access.</div>}
     {loadError && <p className="field-error" role="alert">{loadError}</p>}
     <div className="stats-grid">
-      <div className="stat stat-featured"><span className="stat-icon">♥</span><strong>{stats.expectedGuests}</strong><span>Expected guests</span></div>
+      <div className="stat stat-featured"><span className="stat-icon">♥</span><strong>{stats.expectedGuests}</strong><span>All expected guests, infants included</span></div>
+      <div className="stat"><span className="stat-icon">♧</span><strong>{stats.packageHeadcount}</strong><span>Estimated package headcount*</span></div>
+      <div className="stat"><span className="stat-icon">♙</span><strong>{stats.adultGuests}</strong><span>Adults (12+)</span></div>
+      <div className="stat"><span className="stat-icon">✿</span><strong>{stats.kidGuests}</strong><span>Kids (3–11)</span></div>
+      <div className="stat"><span className="stat-icon">♡</span><strong>{stats.infantGuests}</strong><span>Infants (0–2)</span></div>
+      <div className="stat"><span className="stat-icon">✧</span><strong>{stats.infantsNeedingSeatOrMeal}</strong><span>Infants needing seat / meal</span></div>
       <div className="stat"><span className="stat-icon">✉</span><strong>{stats.responses}</strong><span>RSVP responses</span></div>
-      <div className="stat"><span className="stat-icon">✓</span><strong>{stats.attendingFamilies}</strong><span>Attending families</span></div>
-      <div className="stat"><span className="stat-icon">♡</span><strong>{stats.declinedFamilies}</strong><span>Declined families</span></div>
+      <div className="stat"><span className="stat-icon">✓</span><strong>{stats.attendingFamilies}</strong><span>Attending families · {stats.declinedFamilies} declined</span></div>
     </div>
+    <p className="dashboard-policy-note">*Estimated package headcount = adults + kids + infants requesting their own seat or meal. Verify the venue's actual pricing and seating rules.</p>
+    {stats.uncategorizedGuests > 0 && <p className="deadline-note dashboard-legacy-note">{stats.uncategorizedGuests} guest(s) are in RSVPs received before age-group tracking. They are included in expected guests but not in the category or package totals. Please reconcile these with the families.</p>}
     <div className="guest-list-head"><div><h2>Family responses</h2><p>Each entry represents one family or group.</p></div><span className="result-count">{filtered.length} shown</span></div>
     <div className="dashboard-filters">
       <div className="filters" aria-label="Filter RSVPs">
@@ -393,9 +417,9 @@ function OrganizerScreen({ onBack }) {
       </div>
       <label className="search-label"><span className="sr-only">Search representative name</span><input className="text-input search-input" value={query} placeholder="Search by name…" onChange={event => setQuery(event.target.value)} /></label>
     </div>
-    <div className="table-scroll"><table className="guest-table"><thead><tr><th>Representative</th><th>RSVP</th><th>Attendees</th><th>Message</th><th>Submitted</th></tr></thead><tbody>
-      {filtered.map(row => <tr key={row.id}><td><strong>{row.representative_name}</strong><small>{row.guest_type === 'godparent' ? row.godparent_role : 'Regular guest'}</small></td><td><span className={`status-pill ${row.attendance_status === 'attending' ? 'status-attending' : 'status-declined'}`}>{row.attendance_status === 'attending' ? 'Attending' : 'Declined'}</span></td><td className="cell-number">{row.attendee_count}</td><td className="message-cell">{row.message || '—'}</td><td className="date-cell">{new Date(row.created_at).toLocaleDateString('en-PH', dateOptions)}</td></tr>)}
-      {!filtered.length && <tr><td colSpan={5} className="empty-results">{records.length ? 'No responses match this filter.' : 'No RSVPs yet. New submissions will appear here.'}</td></tr>}
+    <div className="table-scroll"><table className="guest-table age-table"><thead><tr><th>Representative</th><th>RSVP</th><th>Total</th><th>Adults 12+</th><th>Kids 3–11</th><th>Infants 0–2</th><th>Infant seat / meal</th><th>Message</th><th>Submitted</th></tr></thead><tbody>
+      {filtered.map(row => <tr key={row.id}><td><strong>{row.representative_name}</strong><small>{row.guest_type === 'godparent' ? row.godparent_role : 'Regular guest'}</small></td><td><span className={`status-pill ${row.attendance_status === 'attending' ? 'status-attending' : 'status-declined'}`}>{row.attendance_status === 'attending' ? 'Attending' : 'Declined'}</span></td><td className="cell-number">{row.attendee_count}</td><td className="cell-number">{row.adult_count ?? '—'}</td><td className="cell-number">{row.kid_count ?? '—'}</td><td className="cell-number">{row.infant_count ?? '—'}</td><td className="cell-number">{row.infant_seat_meal_count ?? '—'}</td><td className="message-cell">{row.message || '—'}</td><td className="date-cell">{new Date(row.created_at).toLocaleDateString('en-PH', dateOptions)}</td></tr>)}
+      {!filtered.length && <tr><td colSpan={9} className="empty-results">{records.length ? 'No responses match this filter.' : 'No RSVPs yet. New submissions will appear here.'}</td></tr>}
     </tbody></table></div>
     <div className="dashboard-bottom"><span>Read-only view · No guest editing</span><button className="text-button" onClick={onBack}>← Back to invitation</button></div>
   </section>;
