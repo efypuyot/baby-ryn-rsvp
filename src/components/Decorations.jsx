@@ -1,35 +1,56 @@
 import React from 'react';
 
-function Balloon({ className }) {
-  return <svg className={className} viewBox="0 0 120 215" fill="none" aria-hidden="true">
-    <path d="M60 3C31 3 6 28 6 64c0 36 28 65 38 87h32c10-22 38-51 38-87C114 28 89 3 60 3Z" fill="#9bcdf6" />
-    <path d="M60 3C44 10 27 35 27 65s16 62 22 86h22c6-24 22-56 22-86S76 10 60 3Z" fill="#fff0d6" />
-    <path d="M60 3c-7 12-12 34-12 62s7 61 9 86h6c2-25 9-58 9-86S67 15 60 3Z" fill="#9bcdf6" />
-    <path d="M6 64C6 29 31 3 60 3c29 0 54 26 54 61" stroke="#8bc4f2" strokeWidth="1.5" />
-    <path d="M24 151 45 179M96 151 75 179M60 151v29" stroke="#275d90" strokeWidth="2" />
-    <path d="M42 148h36v18H42z" fill="#fff0d6" />
-    <path d="M44 180h32v18c0 7-6 13-13 13H57c-7 0-13-6-13-13v-18Z" fill="#e9ab92" />
-    <path d="M44 180c4 11 11 11 16 0 5 11 12 11 16 0" fill="#fff0d6" />
-  </svg>;
-}
-
+/** Non-interactive invitation illustrations, built from SVG rather than emoji. */
 function Cloud({ className }) {
-  return <svg className={className} viewBox="0 0 210 115" aria-hidden="true">
-    <path d="M35 96C16 96 5 84 5 70c0-17 13-31 31-31 5-23 22-34 39-34 24 0 37 15 42 33 9-10 23-11 34-4 12 7 16 17 15 28 21-4 39 8 39 24 0 17-17 25-33 25H35Z" fill="currentColor" />
-  </svg>;
+  return (
+    <svg className={`cloud ${className}`} viewBox="0 0 310 160" fill="currentColor" aria-hidden="true" focusable="false">
+      <circle cx="51" cy="89" r="56" />
+      <circle cx="109" cy="69" r="63" />
+      <circle cx="179" cy="45" r="66" />
+      <circle cx="248" cy="88" r="61" />
+      <rect x="31" y="74" width="240" height="84" rx="40" />
+    </svg>
+  );
 }
 
-function Petal({ className }) {
-  return <svg className={className} viewBox="0 0 130 130" aria-hidden="true">
-    <path d="M65 49C41-9 8 14 29 57c-50-17-48 30 4 28-24 44 23 57 37 14 24 51 64 16 31-17 45-1 30-47-7-32C116 10 77-8 65 49Z" fill="currentColor" />
-  </svg>;
+function Balloon({ className }) {
+  return (
+    <svg className={`balloon ${className}`} viewBox="0 0 145 260" fill="none" aria-hidden="true" focusable="false">
+      <path d="M72.5 6C37 6 11 34 11 76c0 38 22 76 46 105h31c24-29 46-67 46-105 0-42-26-70-61.5-70Z" fill="#8ac8f5" />
+      <path d="M72.5 6C55 6 42 36 42 75c0 39 11 77 22 106h17c11-29 22-67 22-106C103 36 90 6 72.5 6Z" fill="#fff0d6" />
+      <path d="M72.5 6c-8 0-13 34-13 70 0 40 5 79 10 105h7c5-26 10-65 10-105 0-36-5-70-14-70Z" fill="#8ac8f5" />
+      <path d="M21 181h103l-15 24H36Z" fill="#fff0d6" />
+      <path d="m23 183 37 57m62-57-36 57M59 205v35m27-35v35" stroke="#315e8c" strokeWidth="2.5" strokeLinecap="round" />
+      <path d="M56 239h33v7c0 8-6 13-14 13h-5c-8 0-14-5-14-13z" fill="#e7ad93" />
+      <path d="M56 239q5 11 11 0 5 11 11 0 6 11 11 0" stroke="#fff0d6" strokeWidth="3.5" fill="none" />
+    </svg>
+  );
+}
+
+function Blossom({ className }) {
+  return (
+    <svg className={`petal ${className}`} viewBox="0 0 120 110" fill="currentColor" aria-hidden="true" focusable="false">
+      <ellipse cx="60" cy="33" rx="24" ry="31" />
+      <ellipse cx="91" cy="48" rx="25" ry="30" transform="rotate(65 91 48)" />
+      <ellipse cx="77" cy="81" rx="25" ry="29" transform="rotate(135 77 81)" />
+      <ellipse cx="43" cy="81" rx="25" ry="29" transform="rotate(-135 43 81)" />
+      <ellipse cx="29" cy="48" rx="25" ry="30" transform="rotate(-65 29 48)" />
+      <circle cx="60" cy="58" r="19" />
+    </svg>
+  );
 }
 
 export function Decorations() {
-  return <div className="decorations" aria-hidden="true">
-    <Cloud className="cloud cloud-top-left" /><Cloud className="cloud cloud-top-right" />
-    <Cloud className="cloud cloud-bottom-left" /><Cloud className="cloud cloud-bottom-right" />
-    <Balloon className="balloon balloon-right" /><Balloon className="balloon balloon-left" />
-    <Petal className="petal petal-left" /><Petal className="petal petal-right" />
-  </div>;
+  return (
+    <div className="decorations" aria-hidden="true">
+      <Cloud className="cloud-top-left" />
+      <Cloud className="cloud-top-right" />
+      <Cloud className="cloud-bottom-left" />
+      <Cloud className="cloud-bottom-right" />
+      <Balloon className="balloon-right" />
+      <Balloon className="balloon-left" />
+      <Blossom className="petal-left" />
+      <Blossom className="petal-right" />
+    </div>
+  );
 }

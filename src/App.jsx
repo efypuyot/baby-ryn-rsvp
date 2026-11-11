@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Decorations } from "./components/Decorations.jsx";
 import { FlowerPhoto, RoundedPhoto } from "./components/Photos.jsx";
+import "./envelope.css";
 import { EVENT, GODPARENTS, PHOTO_PATHS } from "./config.js";
 import { APP_MODE, supabase } from "./lib/supabase.js";
 import { loadRsvps, organizerAllowed, saveRsvp } from "./lib/rsvp.js";
@@ -14,6 +15,42 @@ import {
   totalAttendees,
   validateRsvp,
 } from "./utils.js";
+
+
+/** Inline SVGs: consistent in Chrome, Safari and Android without emoji fonts or icon packages. */
+function Icon({ name, size = 18, className = "" }) {
+  const paths = {
+    heart: <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78Z" />,
+    lock: <><rect x="4" y="10" width="16" height="11" rx="2" /><path d="M8 10V7a4 4 0 0 1 8 0v3" /></>,
+    mail: <><rect x="2.5" y="5" width="19" height="14" rx="2" /><path d="m3 7 9 6 9-6" /></>,
+    "mail-open": <><path d="m2.5 10.5 9.5 6 9.5-6" /><path d="M2.5 10.5V20h19v-9.5M2.5 10.5 12 3l9.5 7.5" /><path d="M7 8h10" /></>,
+    "arrow-left": <><path d="m12 19-7-7 7-7" /><path d="M19 12H5" /></>,
+    "arrow-right": <><path d="M5 12h14" /><path d="m12 5 7 7-7 7" /></>,
+    "arrow-up-right": <><path d="M7 17 17 7" /><path d="M7 7h10v10" /></>,
+    "arrow-up": <><path d="m12 19 0-14" /><path d="m5 12 7-7 7 7" /></>,
+    "sparkles": <><path d="m12 3 1.9 6.1L20 11l-6.1 1.9L12 19l-1.9-6.1L4 11l6.1-1.9L12 3Z" /><path d="m19 18 .6 1.4L21 20l-1.4.6L19 22l-.6-1.4L17 20l1.4-.6L19 18ZM4 2l.5 1.5L6 4l-1.5.5L4 6l-.5-1.5L2 4l1.5-.5L4 2Z" /></>,
+    church: <><path d="M12 2v5M9.5 4.5h5" /><path d="M4 21V11l8-5 8 5v10" /><path d="M2 21h20M10 21v-7a2 2 0 0 1 4 0v7" /><path d="M4 11h16" /></>,
+    utensils: <><path d="M4 2v7a3 3 0 0 0 6 0V2M7 2v20M15 2c-3 4-3 9 0 12h4V2zM19 14v8" /></>,
+    check: <path d="m5 12 4 4L19 6" />,
+    "check-circle": <><circle cx="12" cy="12" r="9" /><path d="m8 12 3 3 5-6" /></>,
+    "user-round": <><circle cx="12" cy="8" r="4" /><path d="M4 21a8 8 0 0 1 16 0" /></>,
+    users: <><path d="M16 21v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" /><circle cx="9.5" cy="7" r="4" /><path d="M20 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75" /></>,
+    baby: <><circle cx="12" cy="12" r="9" /><path d="M9 10h.01M15 10h.01M9 15c1.6 1.5 4.4 1.5 6 0M12 3c-.1-1 1-2 2-2" /></>,
+    "flower-2": <><path d="M12 12c-1.5-2.5-4-5.5-2-8 2-2 4-1 5 1 1-3 4-3 5-1 2 2 0 5-3 8 3-1 6 1 5 4-1 3-4 3-6 1 1 3-1 6-4 5-3 0-4-3-3-5-2 2-5 2-6 0-2-3 0-5 3-5-3-2-4-5-2-7 2-2 5-1 8 7Z" /><circle cx="12" cy="12" r="1.7" /></>,
+    refresh: <><path d="M20 7v5h-5" /><path d="M4 17v-5h5" /><path d="M5.5 9a7 7 0 0 1 12-2L20 12M4 12l2.5 5a7 7 0 0 0 12-2" /></>,
+    info: <><circle cx="12" cy="12" r="9" /><path d="M12 11v5M12 8h.01" /></>,
+    minus: <path d="M5 12h14" />,
+    plus: <><path d="M5 12h14M12 5v14" /></>,
+    "hand-pointer": <><path d="M9 12V5a2 2 0 0 1 4 0v5a2 2 0 0 1 3 .1c1.4-.9 3.1-.2 3.1 1.6V17c0 2.3-1.7 4-4 4h-3.8c-1.4 0-2.5-.5-3.5-1.5L5 15.5c-1.3-1.4.3-3.7 2-2.9L9 14" /></>,
+  };
+  return (
+    <svg className={`ui-icon ${className}`} width={size} height={size} viewBox="0 0 24 24"
+      fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"
+      strokeLinejoin="round" aria-hidden="true" focusable="false">
+      {paths[name] || paths.heart}
+    </svg>
+  );
+}
 
 const dateOptions = { month: "short", day: "numeric", year: "numeric" };
 const INITIAL_FORM = {
@@ -140,7 +177,7 @@ function App() {
             onClick={reset}
             aria-label="Return to welcome page"
           >
-            <span className="brand-heart">♡</span>
+            <span className="brand-heart"><Icon name="heart" size={21} /></span>
             <span>
               baby ryn <span className="brand-divider">/</span> christening
             </span>
@@ -151,11 +188,11 @@ function App() {
               onClick={openOrganizer}
               title="Parents and organizers only"
             >
-              <span aria-hidden="true">🔒</span> Organizer view
+              <Icon name="lock" size={15} /> Organizer view
             </button>
           ) : (
             <button className="organizer-link" onClick={leaveOrganizer}>
-              ← Back to invitation
+              <Icon name="arrow-left" size={16} /> Back to invitation
             </button>
           )}
         </header>
@@ -194,7 +231,7 @@ function App() {
 
         <footer className="site-footer">
           <span>
-            Made with love for Baby Ryn <span className="blue-heart">♥</span>
+            Made with love for Baby Ryn <Icon name="heart" size={13} className="blue-heart" />
           </span>
           <span>December 13, 2026 · Cebu City</span>
         </footer>
@@ -207,7 +244,7 @@ function ModeNotice() {
   if (APP_MODE === "demo")
     return (
       <div className="mode-banner" role="note">
-        ✦ Local demo mode — RSVPs stay in this browser only. Configure Supabase
+        <Icon name="info" size={16} /> Local demo mode — RSVPs stay in this browser only. Configure Supabase
         before sharing your website.
       </div>
     );
@@ -268,7 +305,7 @@ function Welcome({ nameInput, setNameInput, error, onContinue }) {
         <br className="desktop-break" /> the christening of their beloved son,
       </p>
       <h1 className="baby-name" id="welcome-title">
-        Ryn<span className="baby-name-star">✧</span>
+        Ryn<span className="baby-name-star"><Icon name="sparkles" size={22} /></span>
       </h1>
       <div className="event-highlight">
         <span>
@@ -305,20 +342,111 @@ function Welcome({ nameInput, setNameInput, error, onContinue }) {
             </p>
           )}
           <button className="button button-primary" type="submit">
-            Open my invitation <span aria-hidden="true">→</span>
+            Open my invitation <Icon name="arrow-right" size={18} />
           </button>
         </form>
         <p className="fineprint">
           One person may RSVP for the whole family.{" "}
-          <span aria-hidden="true">♡</span>
+          <Icon name="heart" size={16} />
         </p>
       </div>
     </section>
   );
 }
 
+
+/** Interactive invitation for recognized godparents. No additional component dependency. */
+function EnvelopeReveal({ godparent, onBack, onRead }) {
+  const [opened, setOpened] = useState(false);
+  const swipeStartY = useRef(null);
+  const name = `${godparent.role} ${godparent.name}`;
+
+  const openOrRead = () => {
+    if (opened) onRead();
+    else setOpened(true);
+  };
+  const handleTouchStart = (event) => {
+    swipeStartY.current = event.touches?.[0]?.clientY ?? null;
+  };
+  const handleTouchEnd = (event) => {
+    const end = event.changedTouches?.[0]?.clientY;
+    if (opened && swipeStartY.current !== null && end !== undefined && swipeStartY.current - end > 40) {
+      event.preventDefault();
+      onRead();
+    }
+    swipeStartY.current = null;
+  };
+
+  return (
+    <section className="page-card envelope-card" aria-labelledby="envelope-title">
+      <SectionEyebrow>A SPECIAL DELIVERY</SectionEyebrow>
+      <div className="envelope-head">
+        <div className="envelope-script">a little love note <Icon name="heart" size={25} /></div>
+        <h1 id="envelope-title">Just for you, {name}</h1>
+        <p>From Baby Ryn, with lots of love and tiny hugs.</p>
+      </div>
+
+      <div className={`envelope-theatre ${opened ? "is-opened" : "is-sealed"}`}>
+        <span className="envelope-sparkle sparkle-one" aria-hidden="true"><Icon name="sparkles" size={31} /></span>
+        <span className="envelope-sparkle sparkle-two" aria-hidden="true"><Icon name="heart" size={25} /></span>
+        <span className="envelope-sparkle sparkle-three" aria-hidden="true"><Icon name="sparkles" size={24} /></span>
+        <button type="button" className="envelope-touch-area"
+          onClick={openOrRead} onTouchStart={handleTouchStart} onTouchEnd={handleTouchEnd}
+          aria-label={opened ? `Unfold and read your letter, ${name}` : `Open your invitation envelope, ${name}`}>
+          <span className="envelope-visual" aria-hidden="true">
+            <span className="envelope-back" />
+            <span className="envelope-note">
+              <span className="envelope-note-icon"><Icon name="heart" size={29} /></span>
+              <span className="envelope-note-dear">Dear {godparent.role},</span>
+              <span className="envelope-note-name">{godparent.name}</span>
+              <span className="envelope-note-bottom">I have something special to tell you...</span>
+            </span>
+            <span className="envelope-front" />
+            <span className="envelope-fold envelope-fold-left" />
+            <span className="envelope-fold envelope-fold-right" />
+            <span className="envelope-flap" />
+            <span className="envelope-seal"><Icon name="heart" size={31} /></span>
+            <span className="envelope-stamp">R</span>
+          </span>
+        </button>
+      </div>
+
+      <div className="envelope-prompts" aria-live="polite" aria-atomic="true">
+        <span className="envelope-instruction-icon" aria-hidden="true">
+          <Icon name={opened ? "arrow-up" : "hand-pointer"} size={25} />
+        </span>
+        <p className="envelope-instruction">
+          {opened ? "Your letter is here! Tap it or swipe upward to unfold." : "Tap the heart seal to open your envelope."}
+        </p>
+        <span className="envelope-instruction-sub">
+          {opened ? "A special message is waiting inside." : "A small surprise for a very special person."}
+        </span>
+      </div>
+      <div className="page-actions envelope-actions">
+        <button className="button button-ghost" onClick={onBack} type="button">
+          <Icon name="arrow-left" size={17} /> Back
+        </button>
+        <button className={`button ${opened ? "button-primary" : "button-secondary"}`}
+          onClick={opened ? onRead : () => setOpened(true)} type="button">
+          {opened ? "Read my letter" : "Open envelope"}
+          <Icon name={opened ? "mail-open" : "heart"} size={18} />
+        </button>
+      </div>
+    </section>
+  );
+}
+
 function GodparentLetter({ godparent, onBack, onContinue }) {
+  const [unfolded, setUnfolded] = useState(false);
   if (!godparent) return null;
+  if (!unfolded)
+    return (
+      <EnvelopeReveal
+        godparent={godparent}
+        onBack={onBack}
+        onRead={() => setUnfolded(true)}
+      />
+    );
   return (
     <section className="page-card letter-card" aria-labelledby="letter-title">
       <SectionEyebrow>A SPECIAL LITTLE LETTER</SectionEyebrow>
@@ -349,20 +477,24 @@ function GodparentLetter({ godparent, onBack, onContinue }) {
         <div className="letter-signoff">
           <span>With lots of love and tiny hugs,</span>
           <strong>
-            Baby Ryn <span aria-hidden="true">&#x1F499;</span>
+            Baby Ryn <Icon name="heart" size={35} />
           </strong>
         </div>
       </div>
       <div className="page-actions">
-        <button className="button button-ghost" onClick={onBack} type="button">
-          ← Back
+        <button
+          className="button button-ghost"
+          onClick={() => setUnfolded(false)}
+          type="button"
+        >
+          <Icon name="arrow-left" size={16} /> Back to envelope
         </button>
         <button
           className="button button-primary"
           onClick={onContinue}
           type="button"
         >
-          Continue to RSVP <span aria-hidden="true">→</span>
+          Continue to RSVP <Icon name="arrow-right" size={18} />
         </button>
       </div>
     </section>
@@ -373,7 +505,7 @@ function LocationCard({ label, icon, time, venue, address, className = "" }) {
   return (
     <article className={`location-card ${className}`}>
       <div className="location-icon" aria-hidden="true">
-        {icon}
+        <Icon name={icon} size={25} />
       </div>
       <div>
         <div className="location-topline">
@@ -387,7 +519,7 @@ function LocationCard({ label, icon, time, venue, address, className = "" }) {
           target="_blank"
           rel="noopener noreferrer"
         >
-          View on Google Maps <span aria-hidden="true">↗</span>
+          View on Google Maps <Icon name="arrow-up-right" size={16} />
         </a>
       </div>
     </article>
@@ -403,14 +535,14 @@ function CelebrationDetails() {
       <div className="location-grid">
         <LocationCard
           label="CHRISTENING CEREMONY"
-          icon={"\u271D"}
+          icon="church"
           time={EVENT.ceremonyTime}
           venue={EVENT.ceremonyVenue}
           address={EVENT.ceremonyAddress}
         />
         <LocationCard
           label="LUNCHEON TO FOLLOW"
-          icon={"\u2667"}
+          icon="utensils"
           time={EVENT.luncheonTime}
           venue={EVENT.luncheonVenue}
           address={EVENT.luncheonAddress}
@@ -456,13 +588,11 @@ function RsvpScreen({
       <CelebrationDetails />
       <div className="rsvp-form-card">
         <div className="rsvp-form-heading">
-          <span aria-hidden="true" className="rsvp-envelope">
-            ✉
-          </span>
+          <span aria-hidden="true" className="rsvp-envelope"><Icon name="mail" size={35} /></span>
           <div>
             <SectionEyebrow>RESERVE YOUR SEATS</SectionEyebrow>
             <h2>
-              Kindly RSVP <span aria-hidden="true">♡</span>
+              Kindly RSVP <Icon name="heart" size={16} />
             </h2>
           </div>
         </div>
@@ -502,7 +632,7 @@ function RsvpScreen({
           </div>
           {matchedGodparent && (
             <p className="role-tag">
-              ♡ Your invitation recognizes you as {matchedGodparent.role}{" "}
+              <Icon name="heart" size={14} /> Your invitation recognizes you as {matchedGodparent.role}{" "}
               {matchedGodparent.name}
             </p>
           )}
@@ -531,7 +661,7 @@ function RsvpScreen({
                   }
                 />
                 <span className="option-icon" aria-hidden="true">
-                  ♥
+                  <Icon name="heart" size={25} />
                 </span>
                 <span>
                   <strong>Joyfully accepts</strong>
@@ -556,7 +686,7 @@ function RsvpScreen({
                   }
                 />
                 <span className="option-icon" aria-hidden="true">
-                  ✉
+                  <Icon name="mail" size={25} />
                 </span>
                 <span>
                   <strong>Regretfully declines</strong>
@@ -676,7 +806,7 @@ function RsvpScreen({
             type="submit"
           >
             {submitting ? "Saving your RSVP…" : "Confirm our RSVP"}{" "}
-            <span aria-hidden="true">→</span>
+            <Icon name="arrow-right" size={18} />
           </button>
           <p className="form-privacy">
             Your RSVP is shared only with the event organizers.
@@ -692,7 +822,7 @@ function RsvpScreen({
       </div>
       <div className="page-actions single-back">
         <button className="button button-ghost" type="button" onClick={onBack}>
-          ← Back
+          <Icon name="arrow-left" size={18} /> Back
         </button>
       </div>
     </section>
@@ -716,7 +846,7 @@ function AgeCounter({ id, label, sublabel, value, max, onChange }) {
           disabled={!canDecrease}
           onClick={() => onChange(number - 1)}
         >
-          −
+          <Icon name="minus" size={18} />
         </button>
         <input
           type="number"
@@ -735,7 +865,7 @@ function AgeCounter({ id, label, sublabel, value, max, onChange }) {
           disabled={!canIncrease}
           onClick={() => onChange(number + 1)}
         >
-          +
+          <Icon name="plus" size={18} />
         </button>
       </div>
     </div>
@@ -747,9 +877,7 @@ function ThankYou({ form, onReset }) {
   const count = totalAttendees(form);
   return (
     <section className="page-card thanks-card" aria-labelledby="thanks-title">
-      <div className="thanks-heart" aria-hidden="true">
-        ♥
-      </div>
+      <div className="thanks-heart" aria-hidden="true"><Icon name="heart" size={56} /></div>
       <SectionEyebrow>RSVP RECEIVED</SectionEyebrow>
       <h1 id="thanks-title">
         Thank you, <em>{form.representative_name}!</em>
@@ -781,7 +909,7 @@ function ThankYou({ form, onReset }) {
         <>
           <p>
             Thank you for letting us know. You'll be with us in spirit on Baby
-            Ryn's special day. ♡
+            Ryn's special day.
           </p>
           <div className="confirmation-box">
             <span>Your response has been saved</span>
@@ -801,11 +929,11 @@ function ThankYou({ form, onReset }) {
           type="button"
           onClick={onReset}
         >
-          Return to invitation <span aria-hidden="true">↗</span>
+          Return to invitation <Icon name="arrow-up-right" size={18} />
         </button>
       </div>
       <p className="signoff-script">
-        With love, Baby Ryn <span aria-hidden="true">♡</span>
+        With love, Baby Ryn <Icon name="heart" size={16} />
       </p>
     </section>
   );
@@ -956,7 +1084,7 @@ function OrganizerScreen({ onBack }) {
           README before using the organizer dashboard.
         </p>
         <button className="button button-secondary" onClick={onBack}>
-          ← Back to invitation
+          <Icon name="arrow-left" size={16} /> Back to invitation
         </button>
       </section>
     );
@@ -968,7 +1096,7 @@ function OrganizerScreen({ onBack }) {
       >
         <SectionEyebrow>FOR THE PARENTS & ORGANIZERS</SectionEyebrow>
         <div className="organizer-icon" aria-hidden="true">
-          ♧
+          <Icon name="users" size={30} />
         </div>
         <h1 id="login-title">Welcome, organizers</h1>
         <p>Sign in to see who's celebrating with Baby Ryn.</p>
@@ -1008,11 +1136,11 @@ function OrganizerScreen({ onBack }) {
             className="button button-primary"
           >
             {busy ? "Signing in…" : "Sign in securely"}{" "}
-            <span aria-hidden="true">→</span>
+            <Icon name="arrow-right" size={18} />
           </button>
         </form>
         <button className="button button-ghost" onClick={onBack}>
-          ← Back to invitation
+          <Icon name="arrow-left" size={16} /> Back to invitation
         </button>
       </section>
     );
@@ -1026,7 +1154,7 @@ function OrganizerScreen({ onBack }) {
         <div>
           <SectionEyebrow>FOR THE PARENTS & ORGANIZERS</SectionEyebrow>
           <h1 id="dashboard-title">
-            Our guest list <span aria-hidden="true">♡</span>
+            Our guest list <Icon name="heart" size={16} />
           </h1>
           <p>A little overview of who's joining Ryn's big day.</p>
         </div>
@@ -1036,7 +1164,7 @@ function OrganizerScreen({ onBack }) {
             type="button"
             onClick={refresh}
           >
-            ↻ Refresh
+            <Icon name="refresh" size={17} /> Refresh
           </button>
           {APP_MODE === "live" && (
             <button
@@ -1064,42 +1192,42 @@ function OrganizerScreen({ onBack }) {
       )}
       <div className="stats-grid">
         <div className="stat stat-featured">
-          <span className="stat-icon">♥</span>
+          <span className="stat-icon"><Icon name="heart" size={21} /></span>
           <strong>{stats.expectedGuests}</strong>
           <span>All expected guests, infants included</span>
         </div>
         <div className="stat">
-          <span className="stat-icon">♧</span>
+          <span className="stat-icon"><Icon name="utensils" size={21} /></span>
           <strong>{stats.packageHeadcount}</strong>
           <span>Estimated package headcount*</span>
         </div>
         <div className="stat">
-          <span className="stat-icon">♙</span>
+          <span className="stat-icon"><Icon name="user-round" size={21} /></span>
           <strong>{stats.adultGuests}</strong>
           <span>Adults (12+)</span>
         </div>
         <div className="stat">
-          <span className="stat-icon">✿</span>
+          <span className="stat-icon"><Icon name="flower-2" size={21} /></span>
           <strong>{stats.kidGuests}</strong>
           <span>Kids (3–11)</span>
         </div>
         <div className="stat">
-          <span className="stat-icon">♡</span>
+          <span className="stat-icon"><Icon name="baby" size={21} /></span>
           <strong>{stats.infantGuests}</strong>
           <span>Infants (0–2)</span>
         </div>
         <div className="stat">
-          <span className="stat-icon">✧</span>
+          <span className="stat-icon"><Icon name="sparkles" size={21} /></span>
           <strong>{stats.infantsNeedingSeatOrMeal}</strong>
           <span>Infants needing seat / meal</span>
         </div>
         <div className="stat">
-          <span className="stat-icon">✉</span>
+          <span className="stat-icon"><Icon name="mail" size={21} /></span>
           <strong>{stats.responses}</strong>
           <span>RSVP responses</span>
         </div>
         <div className="stat">
-          <span className="stat-icon">✓</span>
+          <span className="stat-icon"><Icon name="check-circle" size={21} /></span>
           <strong>{stats.attendingFamilies}</strong>
           <span>Attending families · {stats.declinedFamilies} declined</span>
         </div>
@@ -1292,7 +1420,7 @@ function OrganizerScreen({ onBack }) {
       <div className="dashboard-bottom">
         <span>Read-only view · No guest editing</span>
         <button className="text-button" onClick={onBack}>
-          ← Back to invitation
+          <Icon name="arrow-left" size={16} /> Back to invitation
         </button>
       </div>
     </section>
