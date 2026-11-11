@@ -37,6 +37,7 @@ No database migration is required for this mobile-only update.
 ## Photo filenames (unchanged)
 
 Put your photos in `public/images/`:
+
 - `ryn-main.jpg`
 - `ryn-letter.jpg`
 - `ryn-rsvp.jpg`

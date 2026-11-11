@@ -1,8 +1,8 @@
 /* Flower mask restores the invitation's soft petal-shaped photo frames. */
 .flower-outline,
 .flower-inner {
-  -webkit-mask-image: url('/flower-mask.svg');
-  mask-image: url('/flower-mask.svg');
+  -webkit-mask-image: url("/flower-mask.svg");
+  mask-image: url("/flower-mask.svg");
   -webkit-mask-repeat: no-repeat;
   mask-repeat: no-repeat;
   -webkit-mask-size: 100% 100%;
@@ -10,9 +10,16 @@
   -webkit-mask-position: center;
   mask-position: center;
 }
-.flower-outline { overflow: hidden; }
-.flower-inner { aspect-ratio: 1; }
+.flower-outline {
+  overflow: hidden;
+}
+.flower-inner {
+  aspect-ratio: 1;
+}
 /* Graceful fallback for browsers that don't support CSS masks. */
-@supports not (mask-image: url('/flower-mask.svg')) {
-  .flower-outline, .flower-inner { border-radius: 37%; }
+@supports not (mask-image: url("/flower-mask.svg")) {
+  .flower-outline,
+  .flower-inner {
+    border-radius: 37%;
+  }
 }

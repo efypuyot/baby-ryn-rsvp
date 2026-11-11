@@ -8,7 +8,7 @@ This update adds animations without changing your Supabase schema, RSVP code, go
 2. In your existing `src/main.jsx`, immediately after `import './styles.css';`, add:
 
    ```js
-   import './animations.css';
+   import "./animations.css";
    ```
 
 3. Run `npm run dev`, then `npm test` and `npm run build` in your project.
@@ -17,6 +17,7 @@ This update adds animations without changing your Supabase schema, RSVP code, go
 **Do not replace your existing `src/config.js` or `.env` file.** This update uses only CSS and a stylesheet import. It does not touch Supabase or RSVP data.
 
 ### Effects
+
 - Gently drifting clouds, balloons and decorative flowers
 - Soft entrance animation on each invitation step
 - Blooming baby-photo frames and staggered letter text
@@ -30,6 +31,7 @@ All motion is disabled by the visitor's operating-system **Reduce Motion** setti
 ### Photo filenames (unchanged)
 
 Place images inside `public/images/`:
+
 - `ryn-main.jpg` — front-facing portrait
 - `ryn-letter.jpg` — side-profile portrait
 - `ryn-rsvp.jpg` — close-up portrait

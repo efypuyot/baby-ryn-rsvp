@@ -3,6 +3,7 @@
 Your existing Supabase and Vercel projects are retained.
 
 ## 1. Database first
+
 In Supabase Dashboard > SQL Editor, paste and run:
 `supabase/2026-11-10_age_group_counts.sql`
 
@@ -32,6 +33,7 @@ git push
 Vercel redeploys from the connected branch.
 
 ## Age groups / organizer totals
+
 - Adults: 12+.
 - Kids: 3–11.
 - Infants: 0–2.
