@@ -636,10 +636,9 @@ h1 {
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: left;
-  gap: 25px;
+  text-align: center;
   padding: 0 0 22px;
-  border-bottom: 1px solid #b8daee;
+  flex-direction: column;
 }
 .rsvp-heading > div:first-child {
   flex: 1;
@@ -1636,7 +1635,7 @@ h1 {
     padding: 29px 14px;
   }
   .rsvp-heading {
-    flex-direction: column-reverse;
+    flex-direction: column;
     text-align: center;
     gap: 8px;
   }

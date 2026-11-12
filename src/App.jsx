@@ -443,7 +443,7 @@ function Welcome({ onContinue }) {
           December 13 <span className="event-pipe">|</span> 10 AM
         </span>
         <strong>Our Lady of Sacred Heart Parish Cebu</strong>
-        <small>15 N. Escario St., Cebu City</small>
+        <small>15 N. Escario St., Cebu City, 6000 Cebu</small>
       </div>
       <div className="welcome-form-panel invitation-open-panel">
         <button
@@ -1034,9 +1034,13 @@ function RsvpScreen({
         </a>
         {" or "}
         <a
-          href={`mailto:${EVENT.organizerEmail}?subject=${encodeURIComponent(
+          href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+            EVENT.organizerEmail
+          )}&su=${encodeURIComponent(
             "[Baby Ryn's Christening] Event Inquiry"
           )}`}
+          target="_blank"
+          rel="noopener noreferrer"
         >
           {EVENT.organizerEmail}
         </a>
