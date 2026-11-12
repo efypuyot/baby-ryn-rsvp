@@ -21,6 +21,19 @@ export function findGodparent(value, godparents) {
   return matches.length === 1 ? matches[0] : null;
 }
 
+/** Recognize a godparent only from an explicitly configured, unique URL route. */
+export function findGodparentByRoute(pathname, godparents) {
+  const route = String(pathname ?? "")
+    .replace(/\/+$/, "")
+    .toLocaleLowerCase("en-PH");
+  if (!route || route === "/") return null;
+  const matches = godparents.filter((person) =>
+    typeof person.slug === "string" &&
+    `/${person.slug.toLocaleLowerCase("en-PH")}` === route
+  );
+  return matches.length === 1 ? matches[0] : null;
+}
+
 /** The headcount includes infants, even if they do not need a seat or package. */
 function countOrNaN(value) {
   if (value === null || value === undefined || String(value).trim() === "")

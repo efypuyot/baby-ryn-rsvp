@@ -8,7 +8,7 @@ import { loadRsvps, organizerAllowed, saveRsvp } from "./lib/rsvp.js";
 import {
   cleanName,
   directionsUrl,
-  findGodparent,
+  findGodparentByRoute,
   isPastDeadline,
   rsvpPayload,
   rsvpStats,
@@ -175,10 +175,18 @@ function App() {
   const [page, setPage] = useState(() =>
     window.location.hash === "#/organizer" ? "organizer" : "welcome"
   );
-  const [nameInput, setNameInput] = useState("");
-  const [nameError, setNameError] = useState("");
-  const [matchedGodparent, setMatchedGodparent] = useState(null);
-  const [form, setForm] = useState({ ...INITIAL_FORM });
+  // Individual godparent URLs select the letter without asking for a name.
+  const matchedGodparent = useMemo(
+    () => findGodparentByRoute(window.location.pathname, GODPARENTS),
+    []
+  );
+  const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
+  const unknownRoute =
+    !["/", "/guest"].includes(currentPath) && !matchedGodparent;
+  const [form, setForm] = useState(() => ({
+    ...INITIAL_FORM,
+    representative_name: matchedGodparent?.name ?? "",
+  }));
   const [submitError, setSubmitError] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const submissionId = useRef(null);
@@ -226,19 +234,9 @@ function App() {
     setPage("welcome");
   };
 
-  const continueName = (event) => {
-    event.preventDefault();
-    const name = cleanName(nameInput);
-    if (name.length < 2 || name.length > 120) {
-      setNameError("Please enter a name between 2 and 120 characters.");
-      return;
-    }
-    setNameError("");
-    const godparent = findGodparent(name, GODPARENTS);
-    setMatchedGodparent(godparent);
-    setForm((previous) => ({ ...previous, representative_name: name }));
+  const openInvitation = () => {
     submissionId.current = crypto.randomUUID();
-    move(godparent ? "letter" : "rsvp");
+    move(matchedGodparent ? "letter" : "rsvp");
   };
 
   const submitRsvp = async (event) => {
@@ -268,10 +266,10 @@ function App() {
 
   const reset = () => {
     submissionId.current = null;
-    setMatchedGodparent(null);
-    setNameInput("");
-    setNameError("");
-    setForm({ ...INITIAL_FORM });
+    setForm({
+      ...INITIAL_FORM,
+      representative_name: matchedGodparent?.name ?? "",
+    });
     move("welcome");
   };
 
@@ -308,22 +306,29 @@ function App() {
         </header>
 
         <main className="stage" ref={mainRef} tabIndex={-1} id="main-content">
-          {page === "welcome" && (
-            <Welcome
-              nameInput={nameInput}
-              setNameInput={setNameInput}
-              error={nameError}
-              onContinue={continueName}
-            />
-          )}
-          {page === "letter" && (
+          {unknownRoute && page !== "organizer" ? (
+            <section className="page-card route-not-found">
+              <SectionEyebrow>INVITATION LINK</SectionEyebrow>
+              <h1>This invitation link wasn't found.</h1>
+              <p>
+                Please check the link you received, or use the public
+                invitation.
+              </p>
+              <a className="button button-primary" href="/guest">
+                Open the guest invitation <Icon name="arrow-right" size={18} />
+              </a>
+            </section>
+          ) : page === "welcome" ? (
+            <Welcome onContinue={openInvitation} />
+          ) : null}
+          {!unknownRoute && page === "letter" && (
             <GodparentLetter
               godparent={matchedGodparent}
               onBack={() => move("welcome")}
               onContinue={() => move("rsvp")}
             />
           )}
-          {page === "rsvp" && (
+          {!unknownRoute && page === "rsvp" && (
             <RsvpScreen
               form={form}
               setForm={setForm}
@@ -332,10 +337,11 @@ function App() {
               submitting={submitting}
               onSubmit={submitRsvp}
               onBack={() => move(matchedGodparent ? "letter" : "welcome")}
-              onChangeName={() => move("welcome")}
             />
           )}
-          {page === "thankyou" && <ThankYou form={form} onReset={reset} />}
+          {!unknownRoute && page === "thankyou" && (
+            <ThankYou form={form} onReset={reset} />
+          )}
           {page === "organizer" && <OrganizerScreen onBack={leaveOrganizer} />}
         </main>
 
@@ -389,7 +395,7 @@ function SectionEyebrow({ children }) {
   );
 }
 
-function Welcome({ nameInput, setNameInput, error, onContinue }) {
+function Welcome({ onContinue }) {
   return (
     <section className="page-card welcome-card" aria-labelledby="welcome-title">
       <ModeNotice />
@@ -439,41 +445,14 @@ function Welcome({ nameInput, setNameInput, error, onContinue }) {
         <strong>Our Lady of Sacred Heart Parish Cebu</strong>
         <small>15 N. Escario St., Cebu City</small>
       </div>
-      <div className="welcome-form-panel">
-        <SectionEyebrow>YOUR INVITATION STARTS HERE</SectionEyebrow>
-        <h2>We're so happy you're here!</h2>
-        <p>Before we begin, may we know your name?</p>
-        <form onSubmit={onContinue} className="name-form">
-          <label htmlFor="guest-name" className="field-label">
-            Your name
-          </label>
-          <input
-            id="guest-name"
-            className="text-input"
-            placeholder="Enter your first or full name"
-            type="text"
-            autoComplete="name"
-            enterKeyHint="go"
-            maxLength={120}
-            value={nameInput}
-            onChange={(event) => setNameInput(event.target.value)}
-            aria-invalid={Boolean(error)}
-            aria-describedby={error ? "name-error" : undefined}
-            required
-          />
-          {error && (
-            <p id="name-error" className="field-error" role="alert">
-              {error}
-            </p>
-          )}
-          <button className="button button-primary" type="submit">
-            Open my invitation <Icon name="arrow-right" size={18} />
-          </button>
-        </form>
-        <p className="fineprint">
-          One person may RSVP for the whole family.{" "}
-          <Icon name="heart" size={16} />
-        </p>
+      <div className="welcome-form-panel invitation-open-panel">
+        <button
+          className="button button-primary"
+          type="button"
+          onClick={onContinue}
+        >
+          Open invitation <Icon name="arrow-right" size={18} />
+        </button>
       </div>
     </section>
   );
@@ -551,7 +530,8 @@ function EnvelopeReveal({ godparent, onBack, onRead }) {
               <span className="envelope-note-dear">Dear {godparent.role},</span>
               <span className="envelope-note-name">{godparent.name}</span>
               <span className="envelope-note-bottom">
-                I have something special to tell you...
+                {godparent.letter?.teaser ||
+                  "I have something special to tell you..."}
               </span>
             </span>
             <span className="envelope-front" />
@@ -625,17 +605,18 @@ function GodparentLetter({ godparent, onBack, onContinue }) {
           </span>
           ,
         </h1>
+        {(
+          godparent.letter?.paragraphs || [
+            "As I begin my journey of faith, Mommy and Daddy chose you to be one of my guideposts.",
+            "I will need your prayers, wisdom and love as I grow. Thank you for being part of this special day.",
+          ]
+        ).map((paragraph, index) => (
+          <p key={index}>{paragraph}</p>
+        ))}
         <p>
-          As I begin my journey of faith, my Mommy and Daddy chose you to be one
-          of my <strong>guideposts.</strong>
+          {godparent.letter?.closing ||
+            "I can't wait to see you on my special day!"}
         </p>
-        <p>
-          I am still very small, but I know I will need your{" "}
-          <strong>wisdom, prayers, and love</strong> as I grow up. Thank you for
-          promising to walk beside me, protect me, and help me become the person
-          God made me to be.
-        </p>
-        <p>I can't wait to see you on my special day!</p>
         <div className="letter-signoff">
           <span>With lots of love and tiny hugs,</span>
           <strong>
@@ -663,7 +644,15 @@ function GodparentLetter({ godparent, onBack, onContinue }) {
   );
 }
 
-function LocationCard({ label, icon, time, venue, address, className = "" }) {
+function LocationCard({
+  label,
+  icon,
+  time,
+  venue,
+  address,
+  href,
+  className = "",
+}) {
   return (
     <article className={`location-card ${className}`}>
       <div className="location-icon" aria-hidden="true">
@@ -677,13 +666,55 @@ function LocationCard({ label, icon, time, venue, address, className = "" }) {
         <h3>{venue}</h3>
         <p>{address}</p>
         <a
-          href={directionsUrl(address)}
+          href={href || directionsUrl(address)}
           target="_blank"
           rel="noopener noreferrer"
         >
           View on Google Maps <Icon name="arrow-up-right" size={16} />
         </a>
       </div>
+    </article>
+  );
+}
+
+function MapJourneyCard() {
+  return (
+    <article className="journey-card">
+      <div className="journey-copy">
+        <div className="journey-kicker">
+          <Icon name="mail-open" size={16} />
+          <span>A little journey after the ceremony</span>
+        </div>
+        <h3>From church to the luncheon</h3>
+        <p>
+          A sweet little ride brings everyone from Our Lady of Sacred Heart
+          Parish on Escario to Casa Pelaez Cebu x The Tavern Music Hall Cebu.
+        </p>
+        <div className="journey-pills" aria-label="Route summary">
+          <span className="journey-pill">Around 6 minutes</span>
+          <span className="journey-pill">About 1.7 km</span>
+          <span className="journey-pill journey-pill-soft">
+            Tentative venue
+          </span>
+        </div>
+      </div>
+      <a
+        className="journey-map-link"
+        href={EVENT.routeMapUrl || EVENT.luncheonMapUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        aria-label="Open the route map from church to reception in Google Maps"
+      >
+        <img
+          src="/images/ryn-route-map.png"
+          alt="Map preview showing the route from Our Lady of Sacred Heart Parish Cebu to Casa Pelaez Cebu x The Tavern Music Hall Cebu"
+          className="journey-map-image"
+          loading="lazy"
+        />
+        <span className="journey-map-cta">
+          Open route in Google Maps <Icon name="arrow-up-right" size={16} />
+        </span>
+      </a>
     </article>
   );
 }
@@ -702,15 +733,19 @@ function CelebrationDetails() {
           time={EVENT.ceremonyTime}
           venue={EVENT.ceremonyVenue}
           address={EVENT.ceremonyAddress}
+          href={EVENT.ceremonyMapUrl}
         />
+
+        <MapJourneyCard />
 
         <LocationCard
           className="luncheon-card"
-          label="LUNCHEON TO FOLLOW"
+          label="LUNCHEON"
           icon="utensils"
           time={EVENT.luncheonTime}
           venue={EVENT.luncheonVenue}
           address={EVENT.luncheonAddress}
+          href={EVENT.luncheonMapUrl}
         />
       </div>
     </div>
@@ -725,7 +760,6 @@ function RsvpScreen({
   submitting,
   onSubmit,
   onBack,
-  onChangeName,
 }) {
   const attending = form.attendance_status === "attending";
   const pastDeadline = isPastDeadline(EVENT.rsvpDeadline);
@@ -778,30 +812,43 @@ function RsvpScreen({
           </p>
         )}
         <form onSubmit={onSubmit} noValidate>
-          <label className="field-label" htmlFor="representative-name">
-            Your name
-          </label>
-          <div className="name-readonly-row">
-            <input
-              className="text-input"
-              type="text"
-              id="representative-name"
-              value={form.representative_name}
-              readOnly
-            />
-            <button
-              type="button"
-              className="text-button"
-              onClick={onChangeName}
+          {matchedGodparent ? (
+            <div
+              className="personal-rsvp-identity"
+              aria-label="RSVP representative"
             >
-              Change
-            </button>
-          </div>
-          {matchedGodparent && (
-            <p className="role-tag">
-              <Icon name="heart" size={14} /> Your invitation recognizes you as{" "}
-              {matchedGodparent.role} {matchedGodparent.name}
-            </p>
+              <Icon name="heart" size={18} />
+              <span>
+                Responding as{" "}
+                <strong>
+                  {matchedGodparent.role} {matchedGodparent.name}
+                </strong>
+              </span>
+            </div>
+          ) : (
+            <>
+              <label className="field-label" htmlFor="representative-name">
+                Your name <span className="required">*</span>
+              </label>
+              <div className="name-readonly-row">
+                <input
+                  className="text-input"
+                  type="text"
+                  id="representative-name"
+                  value={form.representative_name}
+                  placeholder="Enter your first or full name"
+                  onChange={(event) =>
+                    setForm((previous) => ({
+                      ...previous,
+                      representative_name: event.target.value,
+                    }))
+                  }
+                  maxLength={120}
+                  autoComplete="name"
+                  required
+                />
+              </div>
+            </>
           )}
 
           <fieldset className="attendance-fieldset">
@@ -985,6 +1032,14 @@ function RsvpScreen({
         <a href={`tel:${EVENT.organizerPhoneDial}`}>
           {EVENT.organizerPhoneDisplay}
         </a>
+        {" or "}
+        <a
+          href={`mailto:${EVENT.organizerEmail}?subject=${encodeURIComponent(
+            "[Baby Ryn's Christening] Event Inquiry"
+          )}`}
+        >
+          {EVENT.organizerEmail}
+        </a>
         .
       </div>
       <div className="page-actions single-back">
@@ -1090,7 +1145,7 @@ function ThankYou({ form, onReset }) {
       <div className="thanks-details">
         <strong>Sunday, December 13, 2026</strong>
         <span>10:00 AM · Our Lady of Sacred Heart Parish Cebu</span>
-        <span>12:00 PM · Citadines Cebu City</span>
+        <span>12:00 PM · Casa Pelaez / The Tavern (tentative)</span>
       </div>
       <div className="page-actions centered">
         <button

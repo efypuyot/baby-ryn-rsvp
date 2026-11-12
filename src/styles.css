@@ -428,7 +428,6 @@ h1 {
   padding: 0 3px;
 }
 .welcome-form-panel {
-  border-top: 1px solid rgba(135, 191, 231, 0.45);
   padding: 27px 40px 4px;
   max-width: 590px;
   margin: 0 auto;
@@ -1996,4 +1995,157 @@ h1 {
 /* Consistent venue spacing */
 .location-grid .location-card h3 {
   margin-top: 0;
+}
+
+/* Route journey card between ceremony and reception */
+.journey-card {
+  width: 100%;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 18px;
+  padding: 22px;
+  border-radius: 26px;
+  background: linear-gradient(
+    180deg,
+    rgba(239, 248, 255, 0.96),
+    rgba(224, 240, 251, 0.96)
+  );
+  border: 1px solid #d6e8f5;
+  box-shadow: 0 10px 26px rgba(75, 132, 180, 0.08);
+  text-align: left;
+}
+.journey-kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #5f8eb7;
+  margin-bottom: 10px;
+}
+.journey-card h3 {
+  margin: 0 0 8px;
+  font: 400 24px/1.25 "DM Serif Display", Georgia, serif;
+  color: #2d6797;
+}
+.journey-card p {
+  margin: 0;
+  color: #567893;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.journey-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+.journey-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #d5e8f7;
+  color: #2d6797;
+  font-size: 12px;
+  font-weight: 700;
+}
+.journey-pill-soft {
+  background: #cfe8fa;
+  border-color: #bbdff7;
+}
+.journey-map-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+}
+.journey-map-image {
+  display: block;
+  width: 100%;
+  border-radius: 22px;
+  border: 1px solid #cadeef;
+  box-shadow: 0 10px 20px rgba(69, 122, 167, 0.08);
+}
+.journey-map-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 12px;
+  padding: 11px 16px;
+  border-radius: 999px;
+  background: #ffffff;
+  border: 1px solid #d6e8f6;
+  color: #2f6fa5;
+  font-size: 13px;
+  font-weight: 700;
+}
+@media (min-width: 860px) {
+  .journey-card {
+    grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.15fr);
+    align-items: center;
+    padding: 24px;
+  }
+}
+@media (max-width: 600px) {
+  .journey-card {
+    padding: 18px;
+    border-radius: 22px;
+    gap: 14px;
+  }
+  .journey-card h3 {
+    font-size: 21px;
+  }
+  .journey-card p {
+    font-size: 13px;
+  }
+  .journey-pill {
+    font-size: 11px;
+    padding: 7px 12px;
+  }
+  .journey-map-cta {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* Invitation-specific links: the welcome page contains only the opening action. */
+.invitation-open-panel {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.invitation-open-panel .button {
+  width: min(100%, 360px);
+}
+.route-not-found {
+  text-align: center;
+}
+.route-not-found p {
+  margin: 14px auto 24px;
+}
+.route-not-found .button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.personal-rsvp-identity {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: #256794;
+  background: #e8f5fd;
+  border: 1px solid #c9e5f7;
+  padding: 12px 16px;
+  border-radius: 16px;
+  margin-bottom: 20px;
+  font-size: 15px;
+  line-height: 1.5;
+}
+.personal-rsvp-identity strong {
+  font-weight: 700;
 }
