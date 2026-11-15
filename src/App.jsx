@@ -490,11 +490,11 @@ function EnvelopeReveal({ godparent, onBack, onRead }) {
     >
       <SectionEyebrow>A SPECIAL DELIVERY</SectionEyebrow>
       <div className="envelope-head">
-        <div className="envelope-script">
-          a little love note <Icon name="heart" size={25} />
-        </div>
-        <h1 id="envelope-title">Just for you</h1>
-        <p>from baby ryn</p>
+        <div className="envelope-script">a little love note</div>
+        <h1 id="envelope-title">Just for you, {name}</h1>
+        <p>
+          from baby ryn <Icon name="heart" size={10} />
+        </p>
       </div>
 
       <div className={`envelope-theatre ${opened ? "is-opened" : "is-sealed"}`}>
