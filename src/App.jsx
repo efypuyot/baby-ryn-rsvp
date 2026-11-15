@@ -166,8 +166,6 @@ const INITIAL_FORM = {
   attendance_status: "",
   adult_count: 1,
   kid_count: 0,
-  infant_count: 0,
-  infant_seat_meal_count: 0,
   message: "",
 };
 
@@ -495,8 +493,8 @@ function EnvelopeReveal({ godparent, onBack, onRead }) {
         <div className="envelope-script">
           a little love note <Icon name="heart" size={25} />
         </div>
-        <h1 id="envelope-title">Just for you, {name}</h1>
-        <p>From Baby Ryn, with lots of love and tiny hugs.</p>
+        <h1 id="envelope-title">Just for you</h1>
+        <p>from baby ryn</p>
       </div>
 
       <div className={`envelope-theatre ${opened ? "is-opened" : "is-sealed"}`}>
@@ -525,14 +523,10 @@ function EnvelopeReveal({ godparent, onBack, onRead }) {
             <span className="envelope-back" />
             <span className="envelope-note">
               <span className="envelope-note-icon">
-                <Icon name="heart" size={29} />
+                <Icon name="heart" size={25} />
               </span>
               <span className="envelope-note-dear">Dear {godparent.role},</span>
               <span className="envelope-note-name">{godparent.name}</span>
-              <span className="envelope-note-bottom">
-                {godparent.letter?.teaser ||
-                  "I have something special to tell you..."}
-              </span>
             </span>
             <span className="envelope-front" />
             <span className="envelope-fold envelope-fold-left" />
@@ -552,7 +546,7 @@ function EnvelopeReveal({ godparent, onBack, onRead }) {
         </span>
         <p className="envelope-instruction">
           {opened
-            ? "Your letter is here! Tap it or swipe upward to unfold."
+            ? "Tap it or swipe upward to unfold."
             : "Tap the heart seal to open your envelope."}
         </p>
         <span className="envelope-instruction-sub">
@@ -605,20 +599,10 @@ function GodparentLetter({ godparent, onBack, onContinue }) {
           </span>
           ,
         </h1>
-        {(
-          godparent.letter?.paragraphs || [
-            "As I begin my journey of faith, Mommy and Daddy chose you to be one of my guideposts.",
-            "I will need your prayers, wisdom and love as I grow. Thank you for being part of this special day.",
-          ]
-        ).map((paragraph, index) => (
+        {godparent.letter.paragraphs.map((paragraph, index) => (
           <p key={index}>{paragraph}</p>
         ))}
-        <p>
-          {godparent.letter?.closing ||
-            "I can't wait to see you on my special day!"}
-        </p>
         <div className="letter-signoff">
-          <span>With lots of love and tiny hugs,</span>
           <strong>
             Baby Ryn <Icon name="heart" size={35} />
           </strong>
@@ -688,14 +672,12 @@ function MapJourneyCard() {
         <h3>From church to the luncheon</h3>
         <p>
           A sweet little ride brings everyone from Our Lady of Sacred Heart
-          Parish on Escario to Casa Pelaez Cebu x The Tavern Music Hall Cebu.
+          Parish on Escario to Casa Pelaez Cebu x The Tavern Music Hall (Small)
+          Cebu.
         </p>
         <div className="journey-pills" aria-label="Route summary">
           <span className="journey-pill">Around 6 minutes</span>
           <span className="journey-pill">About 1.7 km</span>
-          <span className="journey-pill journey-pill-soft">
-            Tentative venue
-          </span>
         </div>
       </div>
       <a
@@ -923,7 +905,7 @@ function RsvpScreen({
                 <AgeCounter
                   id="adult-count"
                   label="Adults"
-                  sublabel="12 years old & above"
+                  sublabel="4 years old and up"
                   value={form.adult_count}
                   max={EVENT.maxAttendeesPerFamily}
                   onChange={(value) =>
@@ -933,48 +915,14 @@ function RsvpScreen({
                 <AgeCounter
                   id="kid-count"
                   label="Kids"
-                  sublabel="3–11 years old"
+                  sublabel="Under 4 years old"
                   value={form.kid_count}
                   max={EVENT.maxAttendeesPerFamily}
                   onChange={(value) =>
                     setForm((previous) => ({ ...previous, kid_count: value }))
                   }
                 />
-                <AgeCounter
-                  id="infant-count"
-                  label="Infants"
-                  sublabel="0–2 years old"
-                  value={form.infant_count}
-                  max={EVENT.maxAttendeesPerFamily}
-                  onChange={(value) =>
-                    setForm((previous) => ({
-                      ...previous,
-                      infant_count: value,
-                      infant_seat_meal_count: Math.min(
-                        Number(previous.infant_seat_meal_count) || 0,
-                        Number(value) || 0
-                      ),
-                    }))
-                  }
-                />
               </div>
-              {Number(form.infant_count) > 0 && (
-                <div className="infant-special">
-                  <AgeCounter
-                    id="infant-special-count"
-                    label="Infants needing a seat or meal"
-                    sublabel="Of the infants above, how many need their own seat and/or kiddie meal?"
-                    value={form.infant_seat_meal_count}
-                    max={Number(form.infant_count)}
-                    onChange={(value) =>
-                      setForm((previous) => ({
-                        ...previous,
-                        infant_seat_meal_count: value,
-                      }))
-                    }
-                  />
-                </div>
-              )}
               <div className="age-summary">
                 <span>Total family members attending</span>
                 <strong>
@@ -983,11 +931,6 @@ function RsvpScreen({
                     : "—"}
                 </strong>
               </div>
-              <p className="age-policy-note">
-                Infants aged 0–2 are usually excluded from package headcounts
-                unless they need a separate seat or meal. The organizer will
-                confirm the venue's final policy.
-              </p>
             </div>
           )}
 
@@ -1123,14 +1066,7 @@ function ThankYou({ form, onReset }) {
             </strong>
             <small>
               {Number(form.adult_count)} adults · {Number(form.kid_count)} kids
-              · {Number(form.infant_count)} infants
             </small>
-            {Number(form.infant_seat_meal_count) > 0 && (
-              <small>
-                {form.infant_seat_meal_count} infant(s) requesting a seat or
-                meal
-              </small>
-            )}
           </div>
         </>
       ) : (
@@ -1279,6 +1215,7 @@ function OrganizerScreen({ onBack }) {
   };
 
   const stats = useMemo(() => rsvpStats(records), [records]);
+  const showInfantCounts = stats.infantGuests > 0;
   const filtered = useMemo(
     () =>
       records.filter((row) => {
@@ -1424,43 +1361,47 @@ function OrganizerScreen({ onBack }) {
             <Icon name="heart" size={21} />
           </span>
           <strong>{stats.expectedGuests}</strong>
-          <span>All expected guests, infants included</span>
+          <span>All expected guests</span>
         </div>
         <div className="stat">
           <span className="stat-icon">
             <Icon name="utensils" size={21} />
           </span>
           <strong>{stats.packageHeadcount}</strong>
-          <span>Estimated package headcount*</span>
+          <span>Estimated package headcount{showInfantCounts && "*"}</span>
         </div>
         <div className="stat">
           <span className="stat-icon">
             <Icon name="user-round" size={21} />
           </span>
           <strong>{stats.adultGuests}</strong>
-          <span>Adults (12+)</span>
+          <span>Adults</span>
         </div>
         <div className="stat">
           <span className="stat-icon">
             <Icon name="flower-2" size={21} />
           </span>
           <strong>{stats.kidGuests}</strong>
-          <span>Kids (3–11)</span>
+          <span>Kids</span>
         </div>
-        <div className="stat">
-          <span className="stat-icon">
-            <Icon name="baby" size={21} />
-          </span>
-          <strong>{stats.infantGuests}</strong>
-          <span>Infants (0–2)</span>
-        </div>
-        <div className="stat">
-          <span className="stat-icon">
-            <Icon name="sparkles" size={21} />
-          </span>
-          <strong>{stats.infantsNeedingSeatOrMeal}</strong>
-          <span>Infants needing seat / meal</span>
-        </div>
+        {showInfantCounts && (
+          <>
+            <div className="stat">
+              <span className="stat-icon">
+                <Icon name="baby" size={21} />
+              </span>
+              <strong>{stats.infantGuests}</strong>
+              <span>Infants (0–2)</span>
+            </div>
+            <div className="stat">
+              <span className="stat-icon">
+                <Icon name="sparkles" size={21} />
+              </span>
+              <strong>{stats.infantsNeedingSeatOrMeal}</strong>
+              <span>Infants needing seat / meal</span>
+            </div>
+          </>
+        )}
         <div className="stat">
           <span className="stat-icon">
             <Icon name="mail" size={21} />
@@ -1476,10 +1417,12 @@ function OrganizerScreen({ onBack }) {
           <span>Attending families · {stats.declinedFamilies} declined</span>
         </div>
       </div>
-      <p className="dashboard-policy-note">
-        *Estimated package headcount = adults + kids + infants requesting their
-        own seat or meal. Verify the venue's actual pricing and seating rules.
-      </p>
+      {showInfantCounts && (
+        <p className="dashboard-policy-note">
+          *The package estimate includes infants on earlier RSVPs who needed
+          their own seat or meal.
+        </p>
+      )}
       {stats.uncategorizedGuests > 0 && (
         <p className="deadline-note dashboard-legacy-note">
           {stats.uncategorizedGuests} guest(s) are in RSVPs received before
@@ -1531,10 +1474,14 @@ function OrganizerScreen({ onBack }) {
               <th>Representative</th>
               <th>RSVP</th>
               <th>Total</th>
-              <th>Adults 12+</th>
-              <th>Kids 3–11</th>
-              <th>Infants 0–2</th>
-              <th>Infant seat / meal</th>
+              <th>Adults</th>
+              <th>Kids</th>
+              {showInfantCounts && (
+                <>
+                  <th>Infants 0–2</th>
+                  <th>Infant seat / meal</th>
+                </>
+              )}
               <th>Message</th>
               <th>Submitted</th>
             </tr>
@@ -1566,10 +1513,14 @@ function OrganizerScreen({ onBack }) {
                 <td className="cell-number">{row.attendee_count}</td>
                 <td className="cell-number">{row.adult_count ?? "—"}</td>
                 <td className="cell-number">{row.kid_count ?? "—"}</td>
-                <td className="cell-number">{row.infant_count ?? "—"}</td>
-                <td className="cell-number">
-                  {row.infant_seat_meal_count ?? "—"}
-                </td>
+                {showInfantCounts && (
+                  <>
+                    <td className="cell-number">{row.infant_count ?? "—"}</td>
+                    <td className="cell-number">
+                      {row.infant_seat_meal_count ?? "—"}
+                    </td>
+                  </>
+                )}
                 <td className="message-cell">{row.message || "—"}</td>
                 <td className="date-cell">
                   {new Date(row.created_at).toLocaleDateString(
@@ -1581,7 +1532,10 @@ function OrganizerScreen({ onBack }) {
             ))}
             {!filtered.length && (
               <tr>
-                <td colSpan={9} className="empty-results">
+                <td
+                  colSpan={showInfantCounts ? 9 : 7}
+                  className="empty-results"
+                >
                   {records.length
                     ? "No responses match this filter."
                     : "No RSVPs yet. New submissions will appear here."}
@@ -1622,21 +1576,25 @@ function OrganizerScreen({ onBack }) {
                   <dd>{row.attendee_count}</dd>
                 </div>
                 <div>
-                  <dt>Adults (12+)</dt>
+                  <dt>Adults</dt>
                   <dd>{row.adult_count ?? "—"}</dd>
                 </div>
                 <div>
-                  <dt>Kids (3–11)</dt>
+                  <dt>Kids</dt>
                   <dd>{row.kid_count ?? "—"}</dd>
                 </div>
-                <div>
-                  <dt>Infants (0–2)</dt>
-                  <dd>{row.infant_count ?? "—"}</dd>
-                </div>
-                <div>
-                  <dt>Infants: seat / meal</dt>
-                  <dd>{row.infant_seat_meal_count ?? "—"}</dd>
-                </div>
+                {showInfantCounts && (
+                  <>
+                    <div>
+                      <dt>Infants (0–2)</dt>
+                      <dd>{row.infant_count ?? "—"}</dd>
+                    </div>
+                    <div>
+                      <dt>Infants: seat / meal</dt>
+                      <dd>{row.infant_seat_meal_count ?? "—"}</dd>
+                    </div>
+                  </>
+                )}
               </dl>
               {row.message && (
                 <p className="mobile-guest-message">

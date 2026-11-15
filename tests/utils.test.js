@@ -20,8 +20,6 @@ const sampleForm = {
   attendance_status: "attending",
   adult_count: 2,
   kid_count: 1,
-  infant_count: 1,
-  infant_seat_meal_count: 0,
   message: "",
 };
 
@@ -42,39 +40,29 @@ test("refuses ambiguous aliases", () => {
   assert.equal(findGodparent("Marie", duplicate), null);
 });
 
-test("validates family age groups, total limits and infant seat counts", () => {
+test("validates adult and kid counts and total limits", () => {
   assert.equal(validateRsvp(sampleForm, 20), null);
-  assert.equal(totalAttendees(sampleForm), 4);
+  assert.equal(totalAttendees(sampleForm), 3);
   assert.match(
-    validateRsvp(
-      { ...sampleForm, adult_count: 0, kid_count: 0, infant_count: 0 },
-      20,
-    ),
+    validateRsvp({ ...sampleForm, adult_count: 0, kid_count: 0 }, 20),
     /total/,
   );
   assert.match(validateRsvp({ ...sampleForm, adult_count: 21 }, 20), /total/);
   assert.match(validateRsvp({ ...sampleForm, kid_count: 1.5 }, 20), /whole/);
   assert.match(validateRsvp({ ...sampleForm, kid_count: "" }, 20), /whole/);
   assert.match(
-    validateRsvp({ ...sampleForm, infant_seat_meal_count: 2 }, 20),
-    /cannot exceed/,
-  );
-  assert.match(
     validateRsvp({ ...sampleForm, attendance_status: "" }, 20),
     /select/,
   );
 });
 
-test("one RSVP represents a family, with infant subset not double counted", () => {
-  const payload = rsvpPayload(
-    { ...sampleForm, infant_seat_meal_count: 1 },
-    sampleGodparents[0],
-  );
-  assert.equal(payload.attendee_count, 4);
+test("new RSVPs count adults and kids and keep legacy fields compatible", () => {
+  const payload = rsvpPayload(sampleForm, sampleGodparents[0]);
+  assert.equal(payload.attendee_count, 3);
   assert.equal(payload.adult_count, 2);
   assert.equal(payload.kid_count, 1);
-  assert.equal(payload.infant_count, 1);
-  assert.equal(payload.infant_seat_meal_count, 1);
+  assert.equal(payload.infant_count, 0);
+  assert.equal(payload.infant_seat_meal_count, 0);
   assert.equal(payload.guest_type, "godparent");
 });
 

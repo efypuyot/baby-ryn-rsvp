@@ -1,6 +1,11 @@
 :root {
-  font-family: "DM Sans", system-ui, -apple-system, BlinkMacSystemFont,
-    "Segoe UI", sans-serif;
+  font-family:
+    "DM Sans",
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
   color: #275c8b;
   background: #e9f9fd;
   font-synthesis: none;
@@ -59,7 +64,8 @@ h1 {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  background: radial-gradient(
+  background:
+    radial-gradient(
       ellipse 48% 24% at 50% 24%,
       rgba(142, 208, 248, 0.3),
       transparent 77%
@@ -83,13 +89,12 @@ h1 {
   pointer-events: none;
   z-index: -1;
   opacity: 0.16;
-  background-image: radial-gradient(
-      circle at 10% 30%,
-      #84bddf 0 0.7px,
-      transparent 1.5px
-    ),
+  background-image:
+    radial-gradient(circle at 10% 30%, #84bddf 0 0.7px, transparent 1.5px),
     radial-gradient(circle at 55% 82%, #fff 0 1px, transparent 2px);
-  background-size: 21px 26px, 37px 40px;
+  background-size:
+    21px 26px,
+    37px 40px;
 }
 .site-inner {
   position: relative;
@@ -243,7 +248,9 @@ h1 {
   width: 100%;
   max-width: 815px;
   border: 1px solid rgba(255, 255, 255, 0.78);
-  box-shadow: 0 24px 65px #5d9cd318, 0 3px 8px #6bace509;
+  box-shadow:
+    0 24px 65px #5d9cd318,
+    0 3px 8px #6bace509;
   position: relative;
   background: linear-gradient(
     180deg,
@@ -261,7 +268,8 @@ h1 {
   inset: 0;
   pointer-events: none;
   z-index: 0;
-  background: radial-gradient(
+  background:
+    radial-gradient(
       ellipse at 50% 19%,
       rgba(164, 213, 249, 0.2),
       transparent 45%
@@ -280,7 +288,9 @@ h1 {
   justify-content: center;
   align-items: center;
   gap: 12px;
-  font: 700 10px "DM Sans", sans-serif;
+  font:
+    700 10px "DM Sans",
+    sans-serif;
   letter-spacing: 0.19em;
   color: #5e93bd;
   margin: 0 0 23px;
@@ -321,7 +331,11 @@ h1 {
 }
 .arc-text {
   fill: #2f74aa;
-  font: 600 30px "Caveat", "Segoe Print", "Comic Sans MS", cursive;
+  font:
+    600 30px "Caveat",
+    "Segoe Print",
+    "Comic Sans MS",
+    cursive;
   letter-spacing: 0.5px;
 }
 .mobile-prelude {
@@ -369,7 +383,8 @@ h1 {
   font-family: "Caveat", "Segoe Print", "Comic Sans MS", cursive;
   font-size: 42px;
   font-weight: 700;
-  background: radial-gradient(circle at 48% 35%, #f5fdff 4%, transparent 55%),
+  background:
+    radial-gradient(circle at 48% 35%, #f5fdff 4%, transparent 55%),
     linear-gradient(135deg, #bde2f9, #e6f8ff);
 }
 .photo-placeholder .placeholder-heart {
@@ -379,7 +394,9 @@ h1 {
   line-height: 1;
 }
 .photo-placeholder small {
-  font: 600 12px "DM Sans", sans-serif;
+  font:
+    600 12px "DM Sans",
+    sans-serif;
   color: #689ac0;
   letter-spacing: 0.03em;
 }
@@ -388,20 +405,28 @@ h1 {
   height: 310px;
 }
 .invitation-copy {
-  font: 400 clamp(18px, 2.9vw, 25px) / 1.38 "DM Serif Display", Georgia, serif;
+  font:
+    400 clamp(18px, 2.9vw, 25px) / 1.38 "DM Serif Display",
+    Georgia,
+    serif;
   color: #2c6d9f;
   margin: 25px auto 0;
 }
 .baby-name {
-  font: 700 clamp(92px, 16vw, 136px) / 0.88 "Caveat", "Segoe Print",
-    "Comic Sans MS", cursive;
+  font:
+    700 clamp(92px, 16vw, 136px) / 0.88 "Caveat",
+    "Segoe Print",
+    "Comic Sans MS",
+    cursive;
   color: #276da6;
   margin: 10px 0 5px;
   letter-spacing: -0.055em;
 }
 .baby-name-star {
   display: inline-block;
-  font: 400 22px "DM Sans", sans-serif;
+  font:
+    400 22px "DM Sans",
+    sans-serif;
   vertical-align: top;
   margin: 18px 0 0 3px;
   color: #9ac9f0;
@@ -414,13 +439,21 @@ h1 {
   margin: 9px auto 29px;
 }
 .event-highlight > span {
-  font: 400 31px/1.2 "DM Serif Display", Georgia, serif;
+  font:
+    400 31px/1.2 "DM Serif Display",
+    Georgia,
+    serif;
 }
 .event-highlight strong {
-  font: 400 18px "DM Serif Display", Georgia, serif;
+  font:
+    400 18px "DM Serif Display",
+    Georgia,
+    serif;
 }
 .event-highlight small {
-  font: 500 13px "DM Sans", sans-serif;
+  font:
+    500 13px "DM Sans",
+    sans-serif;
 }
 .event-pipe {
   font-size: 22px;
@@ -468,7 +501,9 @@ h1 {
   background: #fffdfd;
   color: #285d87;
   font-size: 14px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 .text-input::placeholder {
   color: #9cb5c9;
@@ -501,7 +536,10 @@ h1 {
   min-height: 47px;
   font-size: 13px;
   font-weight: 700;
-  transition: transform 0.17s, background 0.17s, box-shadow 0.17s;
+  transition:
+    transform 0.17s,
+    background 0.17s,
+    box-shadow 0.17s;
   text-decoration: none;
 }
 .button:not(:disabled):hover {
@@ -581,7 +619,10 @@ h1 {
   white-space: normal;
 }
 .letter-heading em {
-  font: 700 clamp(34px, 5vw, 53px) / 1 "Caveat", "Segoe Print", "Comic Sans MS",
+  font:
+    700 clamp(34px, 5vw, 53px) / 1 "Caveat",
+    "Segoe Print",
+    "Comic Sans MS",
     cursive;
   font-style: normal;
   text-decoration: underline;
@@ -589,7 +630,11 @@ h1 {
   text-decoration-thickness: 2px;
 }
 .letter-body > p {
-  font: 400 clamp(17px, 2.7vw, 23px) / 1.54 "DM Serif Display", Georgia, serif;
+  white-space: pre-line;
+  font:
+    400 clamp(17px, 2.7vw, 23px) / 1.54 "DM Serif Display",
+    Georgia,
+    serif;
   margin: 0 0 23px;
 }
 .letter-body > p strong {
@@ -602,10 +647,18 @@ h1 {
   margin: 47px 0 17px;
 }
 .letter-signoff span {
-  font: 600 35px/1 "Caveat", "Segoe Print", "Comic Sans MS", cursive;
+  font:
+    600 35px/1 "Caveat",
+    "Segoe Print",
+    "Comic Sans MS",
+    cursive;
 }
 .letter-signoff strong {
-  font: 700 68px/1 "Caveat", "Segoe Print", "Comic Sans MS", cursive;
+  font:
+    700 68px/1 "Caveat",
+    "Segoe Print",
+    "Comic Sans MS",
+    cursive;
   letter-spacing: -2px;
 }
 .letter-signoff strong span {
@@ -654,12 +707,19 @@ h1 {
   color: #286c9e;
 }
 .rsvp-heading h1 em {
-  font: 700 1.33em/0.8 "Caveat", "Segoe Print", "Comic Sans MS", cursive;
+  font:
+    700 1.33em/0.8 "Caveat",
+    "Segoe Print",
+    "Comic Sans MS",
+    cursive;
   font-style: normal;
   white-space: nowrap;
 }
 .rsvp-heading p:not(.eyebrow) {
-  font: 400 16px/1.7 "DM Serif Display", Georgia, serif;
+  font:
+    400 16px/1.7 "DM Serif Display",
+    Georgia,
+    serif;
   color: #4e85ad;
   max-width: 440px;
 }
@@ -680,7 +740,11 @@ h1 {
   margin: 0 0 5px;
 }
 .celebration-date {
-  font: 600 25px "Caveat", "Segoe Print", "Comic Sans MS", cursive;
+  font:
+    600 25px "Caveat",
+    "Segoe Print",
+    "Comic Sans MS",
+    cursive;
   margin: 0 0 23px;
   color: #4283b3;
 }
@@ -730,7 +794,10 @@ h1 {
   color: #2e74a9;
 }
 .location-card h3 {
-  font: 400 18px/1.4 "DM Serif Display", Georgia, serif;
+  font:
+    400 18px/1.4 "DM Serif Display",
+    Georgia,
+    serif;
   margin: 10px 0 7px;
   color: #2c6797;
 }
@@ -853,7 +920,9 @@ h1 {
   border-radius: 13px;
   padding: 13px 12px;
   cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
+  transition:
+    background 0.2s,
+    border-color 0.2s;
 }
 .attendance-option.is-selected {
   border-color: #71aee0;
@@ -1003,11 +1072,17 @@ h1 {
   margin: 0 0 12px;
 }
 .thanks-card h1 em {
-  font: 700 1.12em "Caveat", "Segoe Print", "Comic Sans MS", cursive;
+  font:
+    700 1.12em "Caveat",
+    "Segoe Print",
+    "Comic Sans MS",
+    cursive;
   font-style: normal;
 }
 .thanks-card > p:not(.eyebrow):not(.signoff-script) {
-  font: 400 18px/1.55 "DM Serif Display", serif;
+  font:
+    400 18px/1.55 "DM Serif Display",
+    serif;
   max-width: 490px;
   margin: 0 auto 24px;
 }
@@ -1029,7 +1104,9 @@ h1 {
   color: #6e97b8;
 }
 .confirmation-box strong {
-  font: 400 32px "DM Serif Display", serif;
+  font:
+    400 32px "DM Serif Display",
+    serif;
 }
 .thanks-details {
   display: flex;
@@ -1043,7 +1120,11 @@ h1 {
   color: #3277a9;
 }
 .signoff-script {
-  font: 700 33px "Caveat", "Segoe Print", "Comic Sans MS", cursive;
+  font:
+    700 33px "Caveat",
+    "Segoe Print",
+    "Comic Sans MS",
+    cursive;
   margin: 27px 0 0;
   color: #2e73a7;
 }
@@ -1156,7 +1237,9 @@ h1 {
   line-height: 1;
 }
 .stat strong {
-  font: 400 36px "DM Serif Display", serif;
+  font:
+    400 36px "DM Serif Display",
+    serif;
   margin: 11px 0 1px;
   color: #286e9f;
 }
@@ -1567,7 +1650,11 @@ h1 {
   }
   .mobile-prelude {
     display: block;
-    font: 600 29px/1 "Caveat", "Segoe Print", "Comic Sans MS", cursive;
+    font:
+      600 29px/1 "Caveat",
+      "Segoe Print",
+      "Comic Sans MS",
+      cursive;
     max-width: 280px;
     margin: 6px auto 20px;
     color: #3176ad;
@@ -1813,7 +1900,10 @@ h1 {
   font-weight: 700;
 }
 .age-summary strong {
-  font: 400 31px "DM Serif Display", Georgia, serif;
+  font:
+    400 31px "DM Serif Display",
+    Georgia,
+    serif;
 }
 .age-policy-note,
 .dashboard-policy-note {
@@ -1892,7 +1982,9 @@ h1 {
   box-sizing: border-box;
   border-radius: 24px;
   padding: 28px 32px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    transform 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 /* First card: white */
@@ -2027,7 +2119,10 @@ h1 {
 }
 .journey-card h3 {
   margin: 0 0 8px;
-  font: 400 24px/1.25 "DM Serif Display", Georgia, serif;
+  font:
+    400 24px/1.25 "DM Serif Display",
+    Georgia,
+    serif;
   color: #2d6797;
 }
 .journey-card p {

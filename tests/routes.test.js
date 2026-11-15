@@ -1,5 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
+import { GODPARENTS } from "../src/config.js";
 import { findGodparentByRoute, validateRsvp } from "../src/utils.js";
 
 const people = [
@@ -16,12 +17,21 @@ test("individual routes recognize an explicitly configured godparent", () => {
 test("ambiguous repeated routes do not match", () => {
   assert.equal(
     findGodparentByRoute("/ninang-marie", [people[0], people[0]]),
-    null
+    null,
   );
 });
 test("regular guests must enter a name at RSVP", () => {
   assert.match(
     validateRsvp({ representative_name: "", attendance_status: "declined" }),
-    /name/
+    /name/,
   );
+});
+
+test("each configured godparent has a unique route and one letter entry", () => {
+  for (const person of GODPARENTS) {
+    assert.equal(findGodparentByRoute(`/${person.slug}`, GODPARENTS), person);
+    assert.deepEqual(Object.keys(person.letter), ["paragraphs"]);
+    assert.equal(person.letter.paragraphs.length, 1);
+    assert.ok(person.letter.paragraphs[0].trim());
+  }
 });

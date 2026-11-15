@@ -5,9 +5,10 @@ export const EVENT = {
   dateLabel: "Sunday, December 13, 2026",
   ceremonyTime: "10:00 AM",
   ceremonyVenue: "Our Lady of Sacred Heart Parish Cebu",
-  ceremonyAddress: "15 N. Escario St., Cebu City, 6000 Cebu",
-  luncheonTime: "12:00 PM",
-  luncheonVenue: "Casa Pelaez Cebu x The Tavern (Small) Music Hall Cebu",
+  ceremonyAddress:
+    "15 N. Escario St., Cebu City, 6000 Cebu (across from Vibo Place / Cebu Grand Hotel)",
+  luncheonTime: "11:30 AM",
+  luncheonVenue: "The Tavern",
   luncheonAddress: "2F, Queensland Manor, Rahmann St, Cebu City, 6000 Cebu",
   ceremonyMapUrl:
     "https://www.google.com/maps/search/?api=1&query=Our+Lady+of+Sacred+Heart+Parish+Cebu+15+N.+Escario+St.,+Cebu+City,+6000+Cebu",
@@ -21,37 +22,271 @@ export const EVENT = {
   maxAttendeesPerFamily: 20,
 };
 
-/**
- * Replace this sample with the ACTUAL godparent list before sharing publicly.
- * Names/aliases must be explicit. Godparent names here are visible in client code.
- * Do not repeat an alias across multiple people.
- */
 export const GODPARENTS = [
   {
-    name: "Marie",
     role: "Ninang",
-    slug: "ninang-marie", // baby-ryn-rsvp.vercel.app/ninang-marie
+    slug: "ninang-marie",
+    name: "Marie",
     letter: {
-      teaser: "An extra-special little note, just for you.",
-      paragraphs: [
-        "Mommy and Daddy chose you, Ninang Marie, to be one of the special people who will help guide me on my journey of faith.",
-        "Right now my world is filled with tiny hands, sleepy smiles, and lots of cuddles. One day, when I am bigger, I hope I can count on your prayers, your advice, and your love as I learn about the world.",
-        "Thank you for being part of my story from the very beginning. Having you as my Ninang makes this day even more special to our family.",
-      ],
-      closing: "I can't wait to see you on my christening day!",
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
     },
   },
-  // Copy this object for each Ninong or Ninang, then customize the letter:
-  // {
-  //   name: "Juan Dela Cruz",
-  //   role: "Ninong",
-  //   slug: "ninong-juan",
-  //   letter: {
-  //     teaser: "A little message from Baby Ryn.",
-  //     paragraphs: ["Write a truly personal paragraph here..."],
-  //     closing: "See you on my special day!",
-  //   },
-  // },
+  {
+    role: "Ninang",
+    slug: "ninang-blessie",
+    name: "Blessie",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-mae",
+    name: "Mae",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-ayis",
+    name: "Ayis",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-katrina",
+    name: "Katrina",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninong",
+    slug: "ninong-jase",
+    name: "Jase",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-micah",
+    name: "Micah",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninong",
+    slug: "ninong-jobz",
+    name: "Jobz",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-fefu",
+    name: "Fefu",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninong",
+    slug: "ninong-lex",
+    name: "Lex",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-yv",
+    name: "YV",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninong",
+    slug: "ninong-andrel",
+    name: "Andrel",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninong",
+    slug: "ninong-thirdy",
+    name: "Thirdy",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-winsome",
+    name: "Winsome",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-ria",
+    name: "Ria",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-genie",
+    name: "Genie",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninong",
+    slug: "ninong-carl",
+    name: "Carl",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-xyme",
+    name: "Xyme",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-jenisha",
+    name: "Jenisha",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-sarah",
+    name: "Sarah",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninong",
+    slug: "ninong-emman",
+    name: "Emman",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-dani",
+    name: "Dani",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninong",
+    slug: "ninong-aj",
+    name: "AJ",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninong",
+    slug: "ninong-toy",
+    name: "Toy",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-jepi",
+    name: "Jepi",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-dianne",
+    name: "Dianne",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninong",
+    slug: "ninong-harris",
+    name: "Harris",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-aulaire",
+    name: "Aulaire",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninong",
+    slug: "ninong-ed",
+    name: "Ed",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-mara",
+    name: "Mara",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninong",
+    slug: "ninong-jasper",
+    name: "Jasper",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninong",
+    slug: "ninong-kenneth",
+    name: "Kenneth",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
+  {
+    role: "Ninang",
+    slug: "ninang-dannette",
+    name: "Dannette",
+    letter: {
+      paragraphs: ["Your personal letter from Baby Ryn is coming soon."],
+    },
+  },
 ];
 
 export const PHOTO_PATHS = {

@@ -4,11 +4,11 @@ The website has a shared guest link and individual godparent links. It is still 
 
 ## Links to share after deploying to Vercel
 
-- Regular guests: `https://baby-ryn-rsvp.vercel.app/hello`
-- Ninang Marie (configured sample): `https://baby-ryn-rsvp.vercel.app/ninang-marie`
+- Regular guests: `https://baby-ryn-rsvp.vercel.app/guest`
+- Ninang Marie (personal link): `https://baby-ryn-rsvp.vercel.app/ninang-marie`
 - `https://baby-ryn-rsvp.vercel.app/` also works as the shared guest invitation.
 
-Every route opens the same welcome artwork with an **Open invitation** button. On personalized godparent routes, that button opens the animated envelope and then the person's letter. The RSVP displays their configured name without an input. On `/hello`, the button opens ceremony/luncheon details and RSVP; the visitor enters their name *there*.
+Every route opens the same welcome artwork with an **Open invitation** button. On personalized godparent routes, that button opens the animated envelope and then the person's letter. The RSVP displays their configured name without an input. On `/guest`, the button opens ceremony/luncheon details and RSVP; the visitor enters their name _there_.
 
 The old `/#/organizer` URL and organizer login continue to work.
 
@@ -22,17 +22,14 @@ Edit `src/config.js` and add another item to `GODPARENTS` like:
   role: "Ninong",
   slug: "ninong-juan",
   letter: {
-    teaser: "A special note from Baby Ryn.",
-    paragraphs: [
-      "Write an opening message specifically for Ninong Juan.",
-      "Write a second, more personal paragraph based on what the family wants to say.",
-    ],
-    closing: "I can't wait to celebrate with you!",
+    paragraphs: [`Write the full message here, including any closing.
+
+Add a blank line between paragraphs.`],
   },
 },
 ```
 
-Then send `https://baby-ryn-rsvp.vercel.app/ninong-juan`. Each slug must be unique and in lowercase, with hyphens and no leading slash. The letter content should be written individually for each godparent. Only Marie has an example in this copy of the project because no other names or custom letters were provided.
+Then send `https://baby-ryn-rsvp.vercel.app/ninong-juan`. Each slug must be unique and in lowercase, with hyphens and no leading slash. Replace the single placeholder string in each godparent’s `letter.paragraphs` with their full message. Use a template literal to include line breaks.
 
 ## Google Maps
 
@@ -44,7 +41,7 @@ The personalized URLs provide convenience, **not identity verification**: anyone
 
 ## Deployment
 
-Vercel uses the new `vercel.json` rewrite so `/hello` and godparent URLs load the same React app even if opened directly or refreshed. This is required for these routes.
+Vercel uses the new `vercel.json` rewrite so `/guest` and godparent URLs load the same React app even if opened directly or refreshed. This is required for these routes.
 
 This ZIP deliberately excludes `.env`, `.git`, `dist`, and `node_modules`. Preserve your existing Supabase environment variables in Vercel / your local `.env`. No Supabase migration is needed.
 

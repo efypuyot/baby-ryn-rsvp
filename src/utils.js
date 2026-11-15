@@ -27,14 +27,14 @@ export function findGodparentByRoute(pathname, godparents) {
     .replace(/\/+$/, "")
     .toLocaleLowerCase("en-PH");
   if (!route || route === "/") return null;
-  const matches = godparents.filter((person) =>
-    typeof person.slug === "string" &&
-    `/${person.slug.toLocaleLowerCase("en-PH")}` === route
+  const matches = godparents.filter(
+    (person) =>
+      typeof person.slug === "string" &&
+      `/${person.slug.toLocaleLowerCase("en-PH")}` === route,
   );
   return matches.length === 1 ? matches[0] : null;
 }
 
-/** The headcount includes infants, even if they do not need a seat or package. */
 function countOrNaN(value) {
   if (value === null || value === undefined || String(value).trim() === "")
     return NaN;
@@ -43,11 +43,7 @@ function countOrNaN(value) {
 }
 
 export function totalAttendees(form) {
-  return (
-    countOrNaN(form.adult_count) +
-    countOrNaN(form.kid_count) +
-    countOrNaN(form.infant_count)
-  );
+  return countOrNaN(form.adult_count) + countOrNaN(form.kid_count);
 }
 
 export function validateRsvp(form, maxCount = 20) {
@@ -57,19 +53,11 @@ export function validateRsvp(form, maxCount = 20) {
   if (!["attending", "declined"].includes(form.attendance_status))
     return "Please select whether your family can attend.";
   if (form.attendance_status === "attending") {
-    const counts = [
-      form.adult_count,
-      form.kid_count,
-      form.infant_count,
-      form.infant_seat_meal_count,
-    ].map(countOrNaN);
-    if (counts.some((count) => !Number.isFinite(count)))
+    const total = totalAttendees(form);
+    if (!Number.isFinite(total))
       return "Please enter a valid whole number (0 or more) for each age group.";
-    const [adults, kids, infants, infantsNeedingSeatOrMeal] = counts;
-    if (adults + kids + infants < 1 || adults + kids + infants > maxCount)
+    if (total < 1 || total > maxCount)
       return `Please enter a total between 1 and ${maxCount} attendees.`;
-    if (infantsNeedingSeatOrMeal > infants)
-      return "Infants needing a seat or meal cannot exceed the total number of infants.";
   }
   if (String(form.message ?? "").length > 500)
     return "Your message must be 500 characters or fewer.";
@@ -80,20 +68,17 @@ export function rsvpPayload(form, godparent) {
   const attending = form.attendance_status === "attending";
   const adultCount = attending ? Number(form.adult_count) : 0;
   const kidCount = attending ? Number(form.kid_count) : 0;
-  const infantCount = attending ? Number(form.infant_count) : 0;
-  const infantSeatMealCount = attending
-    ? Number(form.infant_seat_meal_count)
-    : 0;
   return {
     representative_name: cleanName(form.representative_name),
     guest_type: godparent ? "godparent" : "regular",
     godparent_role: godparent?.role ?? null,
     attendance_status: form.attendance_status,
-    attendee_count: adultCount + kidCount + infantCount,
+    attendee_count: adultCount + kidCount,
     adult_count: adultCount,
     kid_count: kidCount,
-    infant_count: infantCount,
-    infant_seat_meal_count: infantSeatMealCount,
+    // The RSVP database constraint requires both historical fields.
+    infant_count: 0,
+    infant_seat_meal_count: 0,
     message: String(form.message ?? "").trim() || null,
   };
 }

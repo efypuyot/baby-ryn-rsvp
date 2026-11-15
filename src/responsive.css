@@ -418,7 +418,10 @@ textarea {
   }
   .mobile-guest-metrics dd {
     margin: 3px 0 0;
-    font: 400 24px/1.1 "DM Serif Display", Georgia, serif;
+    font:
+      400 24px/1.1 "DM Serif Display",
+      Georgia,
+      serif;
     color: #276c9d;
   }
   .mobile-guest-message {
