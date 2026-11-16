@@ -13,7 +13,10 @@
   z-index: 3;
 }
 .envelope-script {
-  font: 700 clamp(26px, 4vw, 36px) / 1.2 "Caveat", "Segoe Print", cursive;
+  font:
+    700 clamp(26px, 4vw, 36px) / 1.2 "Caveat",
+    "Segoe Print",
+    cursive;
   color: #488cbb;
   margin-bottom: 9px;
 }
@@ -99,24 +102,33 @@
   overflow: hidden;
 }
 .envelope-note-icon {
-  font: 36px/1 Georgia, serif;
+  font:
+    36px/1 Georgia,
+    serif;
   color: #83bdeb;
   margin: 0;
   margin-top: 10px;
   margin-bottom: 10px;
 }
 .envelope-note-dear {
-  font: 400 17px/1.15 "DM Serif Display", Georgia, serif;
+  font:
+    400 17px/1.15 "DM Serif Display",
+    Georgia,
+    serif;
 }
 .envelope-note-name {
-  font: 700 clamp(24px, 5vw, 38px) / 1 "Caveat", cursive;
+  font:
+    700 clamp(24px, 5vw, 38px) / 1 "Caveat",
+    cursive;
   max-width: 100%;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .envelope-note-bottom {
-  font: 500 10px/1.35 "DM Sans", sans-serif;
+  font:
+    500 10px/1.35 "DM Sans",
+    sans-serif;
   color: #81a4bf;
   margin-top: 9px;
   max-width: 170px;
@@ -178,11 +190,17 @@
   place-items: center;
   border-radius: 50%;
   color: #fff;
-  font: 29px Georgia, serif;
+  font:
+    29px Georgia,
+    serif;
   background: radial-gradient(circle at 35% 25%, #8fbee5 0%, #377bb1 75%);
   border: 5px solid #edf8ff;
-  box-shadow: 0 4px 12px #4489b359, inset 0 0 0 1px #ffffff66;
-  transition: opacity 300ms, transform 400ms;
+  box-shadow:
+    0 4px 12px #4489b359,
+    inset 0 0 0 1px #ffffff66;
+  transition:
+    opacity 300ms,
+    transform 400ms;
 }
 .envelope-stamp {
   position: absolute;
@@ -197,7 +215,9 @@
   place-items: center;
   color: #5997c4;
   background: #ebf8ff9c;
-  font: 700 27px "Caveat", cursive;
+  font:
+    700 27px "Caveat",
+    cursive;
   transform: rotate(8deg);
   opacity: 0.7;
 }
@@ -286,12 +306,16 @@
   gap: 4px;
 }
 .envelope-instruction-icon {
-  font: 700 25px "Caveat", cursive;
+  font:
+    700 25px "Caveat",
+    cursive;
   color: #5c9fce;
   line-height: 1;
 }
 .envelope-instruction {
-  font: 700 15px/1.35 "DM Sans", sans-serif;
+  font:
+    700 15px/1.35 "DM Sans",
+    sans-serif;
   color: #306b9b;
   margin: 0;
 }

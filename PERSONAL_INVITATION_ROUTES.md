@@ -31,6 +31,17 @@ Add a blank line between paragraphs.`],
 
 Then send `https://baby-ryn-rsvp.vercel.app/ninong-juan`. Each slug must be unique and in lowercase, with hyphens and no leading slash. Replace the single placeholder string in each godparent’s `letter.paragraphs` with their full message. Use a template literal to include line breaks.
 
+## Invite a couple
+
+Use one `GODPARENTS` entry with a shared slug and letter. Keep the first recipient’s
+`role` and `name` on the entry and add `partner: { role: "Ninang", name: "Micah" }`
+for the second recipient. If individual links already exist, list their slugs in
+`routeAliases` on the shared entry and remove the separate entries.
+
+Jase and Micah’s shared path is `/ninong-jase-and-ninang-micah`. Both names
+appear on the invitation and in the saved RSVP. The adult count starts at two
+and the couple can adjust it before submitting.
+
 ## Google Maps
 
 The **luncheon card's View on Google Maps link** is now `https://maps.app.goo.gl/hVk58p2Q3ch3FEaD8`. The mini route map and its route link are unchanged. Reception remains marked tentative.

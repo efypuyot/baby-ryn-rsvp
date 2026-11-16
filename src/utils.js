@@ -27,12 +27,20 @@ export function findGodparentByRoute(pathname, godparents) {
     .replace(/\/+$/, "")
     .toLocaleLowerCase("en-PH");
   if (!route || route === "/") return null;
-  const matches = godparents.filter(
-    (person) =>
-      typeof person.slug === "string" &&
-      `/${person.slug.toLocaleLowerCase("en-PH")}` === route,
+  const matches = godparents.filter((person) =>
+    [person.slug, ...(person.routeAliases ?? [])].some(
+      (slug) =>
+        typeof slug === "string" &&
+        `/${slug.toLocaleLowerCase("en-PH")}` === route,
+    ),
   );
   return matches.length === 1 ? matches[0] : null;
+}
+
+export function godparentSalutation(godparent) {
+  const name = `${godparent.role} ${godparent.name}`;
+  const { partner } = godparent;
+  return partner ? `${name} & ${partner.role} ${partner.name}` : name;
 }
 
 function countOrNaN(value) {
