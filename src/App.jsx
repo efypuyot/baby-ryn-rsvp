@@ -1107,8 +1107,10 @@ function ThankYou({ form, onReset }) {
       )}
       <div className="thanks-details">
         <strong>Sunday, December 13, 2026</strong>
-        <span>10:00 AM · Our Lady of Sacred Heart Parish Cebu</span>
-        <span>11:30 AM · Casa Pelaez / The Tavern </span>
+        <span>
+          11:00 AM · Our Lady of Sacred Heart Parish - Capitol (Escario St.)
+        </span>
+        <span>12:00 NN · Casa Pelaez / The Tavern </span>
       </div>
       <div className="page-actions centered">
         <button

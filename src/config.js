@@ -3,11 +3,11 @@ export const EVENT = {
   babyName: "Ryn",
   parentNames: "Kath & Tracey",
   dateLabel: "Sunday, December 13, 2026",
-  ceremonyTime: "10:00 AM",
-  ceremonyVenue: "Our Lady of Sacred Heart Parish Cebu",
+  ceremonyTime: "11:00 AM",
+  ceremonyVenue: "Our Lady of Sacred Heart Parish - Capitol (Escario St.)",
   ceremonyAddress:
     "15 N. Escario St., Cebu City, 6000 Cebu (across from Vibo Place / Cebu Grand Hotel)",
-  luncheonTime: "11:30 AM",
+  luncheonTime: "12:00 NN",
   luncheonVenue: "The Tavern",
   luncheonAddress: "2F, Queensland Manor, Rahmann St, Cebu City, 6000 Cebu",
   ceremonyMapUrl:
