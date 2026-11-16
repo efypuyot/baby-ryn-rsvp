@@ -172,12 +172,12 @@ const INITIAL_FORM = {
 
 function App() {
   const [page, setPage] = useState(() =>
-    window.location.hash === "#/organizer" ? "organizer" : "welcome",
+    window.location.hash === "#/organizer" ? "organizer" : "welcome"
   );
   // Individual godparent URLs select the letter without asking for a name.
   const matchedGodparent = useMemo(
     () => findGodparentByRoute(window.location.pathname, GODPARENTS),
-    [],
+    []
   );
   const currentPath = window.location.pathname.replace(/\/+$/, "") || "/";
   const unknownRoute =
@@ -201,7 +201,7 @@ function App() {
       if (window.location.hash === "#/organizer") setPage("organizer");
       else
         setPage((previous) =>
-          previous === "organizer" ? "welcome" : previous,
+          previous === "organizer" ? "welcome" : previous
         );
     };
     window.addEventListener("hashchange", onHashChange);
@@ -232,7 +232,7 @@ function App() {
     window.history.replaceState(
       null,
       "",
-      `${window.location.pathname}${window.location.search}`,
+      `${window.location.pathname}${window.location.search}`
     );
     setPage("welcome");
   };
@@ -259,7 +259,7 @@ function App() {
       move("thankyou");
     } catch (error) {
       setSubmitError(
-        error?.message || "We could not save your RSVP. Please try again.",
+        error?.message || "We could not save your RSVP. Please try again."
       );
     } finally {
       requestInFlight.current = false;
@@ -559,7 +559,9 @@ function EnvelopeReveal({ godparent, onBack, onRead }) {
         </p>
         {opened && godparent.letter.teaser?.length ? (
           godparent.letter.teaser.map((line, index) => (
-            <span className="envelope-instruction-sub" key={index}>{line}</span>
+            <span className="envelope-instruction-sub" key={index}>
+              {line}
+            </span>
           ))
         ) : (
           <span className="envelope-instruction-sub">
@@ -611,7 +613,10 @@ function GodparentLetter({ godparent, onBack, onContinue }) {
           <span>
             {godparent.role} <em>{godparent.name}</em>
             {godparent.partner && (
-              <> &amp; {godparent.partner.role} <em>{godparent.partner.name}</em></>
+              <>
+                {" "}
+                &amp; {godparent.partner.role} <em>{godparent.partner.name}</em>
+              </>
             )}
           </span>
           ,
@@ -996,9 +1001,9 @@ function RsvpScreen({
         {" or "}
         <a
           href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
-            EVENT.organizerEmail,
+            EVENT.organizerEmail
           )}&su=${encodeURIComponent(
-            "[Baby Ryn's Christening] Event Inquiry",
+            "[Baby Ryn's Christening] Event Inquiry"
           )}`}
           target="_blank"
           rel="noopener noreferrer"
@@ -1103,7 +1108,7 @@ function ThankYou({ form, onReset }) {
       <div className="thanks-details">
         <strong>Sunday, December 13, 2026</strong>
         <span>10:00 AM · Our Lady of Sacred Heart Parish Cebu</span>
-        <span>12:00 PM · Casa Pelaez / The Tavern (tentative)</span>
+        <span>11:30 AM · Casa Pelaez / The Tavern </span>
       </div>
       <div className="page-actions centered">
         <button
@@ -1126,8 +1131,8 @@ function OrganizerScreen({ onBack }) {
     APP_MODE === "demo"
       ? "ready"
       : APP_MODE === "unconfigured"
-        ? "setup"
-        : "checking",
+      ? "setup"
+      : "checking"
   );
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -1180,7 +1185,7 @@ function OrganizerScreen({ onBack }) {
         if (active) {
           setAuthState("login");
           setAuthError(
-            "Could not restore your organizer session. Please sign in.",
+            "Could not restore your organizer session. Please sign in."
           );
         }
       }
@@ -1202,13 +1207,13 @@ function OrganizerScreen({ onBack }) {
       });
       if (error)
         throw new Error(
-          "Sign-in failed. Please check your email and password.",
+          "Sign-in failed. Please check your email and password."
         );
       const allowed = await organizerAllowed(data.user?.id);
       if (!allowed) {
         await supabase.auth.signOut();
         throw new Error(
-          "This account is not authorized as an event organizer.",
+          "This account is not authorized as an event organizer."
         );
       }
       setPassword("");
@@ -1247,7 +1252,7 @@ function OrganizerScreen({ onBack }) {
           .includes(query.trim().toLocaleLowerCase("en-PH"));
         return categoryMatches && searchMatches;
       }),
-    [records, filter, query],
+    [records, filter, query]
   );
 
   if (authState === "checking")
@@ -1543,7 +1548,7 @@ function OrganizerScreen({ onBack }) {
                 <td className="date-cell">
                   {new Date(row.created_at).toLocaleDateString(
                     "en-PH",
-                    dateOptions,
+                    dateOptions
                   )}
                 </td>
               </tr>
@@ -1624,7 +1629,7 @@ function OrganizerScreen({ onBack }) {
                 Submitted{" "}
                 {new Date(row.created_at).toLocaleDateString(
                   "en-PH",
-                  dateOptions,
+                  dateOptions
                 )}
               </p>
             </article>
