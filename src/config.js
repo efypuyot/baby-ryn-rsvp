@@ -548,7 +548,7 @@ export const GODPARENTS = [
   },
   {
     role: "Ninang",
-    slug: "ninang-dianne",
+    slug: "ninang-dianne-and-ninong-harris",
     name: "Dianne",
     partner: { role: "Ninong", name: "Harris" },
     routeAliases: ["ninang-dianne", "ninong-harris"],
@@ -577,7 +577,7 @@ export const GODPARENTS = [
   },
   {
     role: "Ninang",
-    slug: "ninang-aulaire",
+    slug: "ninang-aulaire-and-ninong-ed",
     name: "Aulaire",
     partner: { role: "Ninong", name: "Ed" },
     routeAliases: ["ninang-aulaire", "ninong-ed"],
@@ -606,7 +606,7 @@ export const GODPARENTS = [
   },
   {
     role: "Ninang",
-    slug: "ninang-mara",
+    slug: "ninang-mara-and-ninong-jasper",
     name: "Mara",
     partner: { role: "Ninong", name: "Jasper" },
     routeAliases: ["ninang-mara", "ninong-jasper"],
@@ -635,7 +635,7 @@ export const GODPARENTS = [
   },
   {
     role: "Ninong",
-    slug: "ninong-kenneth",
+    slug: "ninong-kenneth-and-ninang-dannette",
     name: "Kenneth",
     partner: { role: "Ninang", name: "Dannette" },
     routeAliases: ["ninang-dannette", "ninong-kenneth"],
