@@ -557,11 +557,17 @@ function EnvelopeReveal({ godparent, onBack, onRead }) {
             ? "Tap it or swipe upward to unfold."
             : "Tap the heart seal to open your envelope."}
         </p>
-        <span className="envelope-instruction-sub">
-          {opened
-            ? "A special message is waiting inside."
-            : "A small surprise for a very special person."}
-        </span>
+        {opened && godparent.letter.teaser?.length ? (
+          godparent.letter.teaser.map((line, index) => (
+            <span className="envelope-instruction-sub" key={index}>{line}</span>
+          ))
+        ) : (
+          <span className="envelope-instruction-sub">
+            {opened
+              ? "A special message is waiting inside."
+              : "A small surprise for a very special person."}
+          </span>
+        )}
       </div>
       <div className="page-actions envelope-actions">
         <button className="button button-ghost" onClick={onBack} type="button">
@@ -612,6 +618,9 @@ function GodparentLetter({ godparent, onBack, onContinue }) {
         </h1>
         {godparent.letter.paragraphs.map((paragraph, index) => (
           <p key={index}>{paragraph}</p>
+        ))}
+        {godparent.letter.closing?.map((line, index) => (
+          <p key={index}>{line}</p>
         ))}
         <div className="letter-signoff">
           <strong>

@@ -22,14 +22,14 @@ Edit `src/config.js` and add another item to `GODPARENTS` like:
   role: "Ninong",
   slug: "ninong-juan",
   letter: {
-    paragraphs: [`Write the full message here, including any closing.
-
-Add a blank line between paragraphs.`],
+    teaser: ["A little hello from Baby Ryn!"],
+    paragraphs: ["Write the letter here."],
+    closing: ["With love,"],
   },
 },
 ```
 
-Then send `https://baby-ryn-rsvp.vercel.app/ninong-juan`. Each slug must be unique and in lowercase, with hyphens and no leading slash. Replace the single placeholder string in each godparent’s `letter.paragraphs` with their full message. Use a template literal to include line breaks.
+Then send `https://baby-ryn-rsvp.vercel.app/ninong-juan`. Each slug must be unique and in lowercase, with hyphens and no leading slash. The optional `teaser` appears after the envelope opens. The optional `closing` appears after the letter body and before Baby Ryn’s signature. Both fields take arrays of strings.
 
 ## Invite a couple
 
