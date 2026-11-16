@@ -440,7 +440,7 @@ function Welcome({ onContinue }) {
       </h1>
       <div className="event-highlight">
         <span>
-          December 13 <span className="event-pipe">|</span> 10 AM
+          December 13 <span className="event-pipe">|</span> 11 AM
         </span>
         <strong>Our Lady of Sacred Heart Parish - Capitol (Escario St.)</strong>
         <small>15 N. Escario St., Cebu City, 6000 Cebu</small>
