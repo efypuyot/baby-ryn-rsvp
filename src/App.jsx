@@ -350,7 +350,8 @@ function App() {
             Made with love for Baby Ryn{" "}
             <Icon name="heart" size={13} className="blue-heart" />
           </span>
-          <span>December 13, 2026 · Cebu City</span>
+          <span>|</span>
+          <span>by Tati Marie</span>
         </footer>
       </div>
     </div>
