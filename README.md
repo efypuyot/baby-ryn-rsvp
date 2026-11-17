@@ -43,3 +43,20 @@ Put your photos in `public/images/`:
 - `ryn-rsvp.jpg`
 
 Note: the responsive mobile dashboard is a **card view**; the original full table remains for wider screens.
+
+## Editing an RSVP
+
+Guests can resubmit using the same name. Godparents can resubmit from their
+personal invitation, including an alias of a couple’s shared link. A repeat
+submission updates the matching response and keeps its original ID and creation
+date. If older duplicate responses already exist, the save updates one match
+and preserves the other rows.
+
+In the Supabase SQL Editor, run
+`supabase/2026-11-17_edit_rsvps.sql` after the age-group migration and before
+deploying the frontend. The migration adds a save function without granting
+direct guest access to read or update the RSVP table. The link or guest name
+is the match key, so anyone who knows it can resubmit.
+
+To roll back, redeploy the previous frontend first. The added column and
+function can stay in place while the older insert-only code runs.

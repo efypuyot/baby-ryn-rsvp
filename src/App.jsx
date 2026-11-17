@@ -255,7 +255,11 @@ function App() {
     setSubmitError("");
     try {
       if (!submissionId.current) submissionId.current = crypto.randomUUID();
-      await saveRsvp(rsvpPayload(form, matchedGodparent), submissionId.current);
+      await saveRsvp(
+        rsvpPayload(form, matchedGodparent),
+        submissionId.current,
+        matchedGodparent,
+      );
       move("thankyou");
     } catch (error) {
       setSubmitError(

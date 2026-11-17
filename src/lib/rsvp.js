@@ -1,3 +1,4 @@
+import { godparentSalutation, normalizeName } from "../utils.js";
 import { APP_MODE, supabase } from "./supabase.js";
 
 const STORAGE_KEY = "baby-ryn-rsvps-local-demo-v1";
@@ -11,18 +12,41 @@ function readLocalRows() {
   }
 }
 
-export async function saveRsvp(payload, submissionId) {
+export async function saveRsvp(payload, submissionId, godparent) {
+  const slug = godparent?.slug ?? null;
+  const name = normalizeName(payload.representative_name);
+  const legacyNames = godparent
+    ? [name, godparent.name, godparentSalutation(godparent), godparent.partner?.name]
+        .filter(Boolean)
+        .map(normalizeName)
+    : [name];
+
   if (APP_MODE === "demo") {
     const rows = readLocalRows();
-    if (!rows.some((row) => row.id === submissionId)) {
-      rows.push({
-        ...payload,
-        id: submissionId,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString(),
-      });
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify(rows));
-    }
+    const matchingRows = rows.filter((row) =>
+      row.guest_type === payload.guest_type &&
+      (row.invitation_slug
+        ? row.invitation_slug === slug
+        : legacyNames.includes(normalizeName(row.representative_name))),
+    );
+    matchingRows.sort((a, b) =>
+      Number(Boolean(b.invitation_slug)) - Number(Boolean(a.invitation_slug)) ||
+      Number(normalizeName(b.representative_name) === name) -
+        Number(normalizeName(a.representative_name) === name) ||
+      (b.updated_at ?? b.created_at).localeCompare(a.updated_at ?? a.created_at),
+    );
+    const existing = matchingRows[0];
+    const now = new Date().toISOString();
+    const response = {
+      ...payload,
+      invitation_slug: slug,
+      id: existing?.id ?? submissionId,
+      created_at: existing?.created_at ?? now,
+      updated_at: now,
+    };
+    if (existing) rows[rows.indexOf(existing)] = response;
+    else rows.push(response);
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(rows));
     return;
   }
 
@@ -32,11 +56,12 @@ export async function saveRsvp(payload, submissionId) {
     );
   }
 
-  // Never append .select(): anonymous guests may INSERT but must not SELECT.
-  const { error } = await supabase
-    .from("rsvps")
-    .insert({ id: submissionId, ...payload });
-  if (error?.code === "23505") return; // Idempotent retry of this specific submission ID.
+  const { error } = await supabase.rpc("save_rsvp", {
+    submission_id: submissionId,
+    response: payload,
+    route_slug: slug,
+    legacy_names: legacyNames,
+  });
   if (error)
     throw new Error("We could not save your RSVP right now. Please try again.");
 }
